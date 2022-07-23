@@ -1,24 +1,74 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
+import jwt_decode from "jwt-decode";
+import { useHistory } from 'react-router-dom';
+import DashboardActions from '../components/DashboardActions'
+import DashboardBanner from '../components/DashboardBanner'
+import DashboardNavbar from '../components/DashboardNavbar'
+
+
 
 function DashboardPage() {
+  const [name, setName] = useState('');
+    const [token, setToken] = useState('');
+    const [expire, setExpire] = useState('');
+    const [users, setUsers] = useState([]);
+    const history = useHistory();
+
+    useEffect(() => {
+      refreshToken();
+      getUsers();
+  }, []);
+
+  const refreshToken = async () => {
+    try {
+        const response = await axios.get('http://localhost:5000/token');
+        setToken(response.data.accessToken);
+        const decoded = jwt_decode(response.data.accessToken);
+        setName(decoded.name);
+        setExpire(decoded.exp);
+    } catch (error) {
+        if (error.response) {
+            history.push("/");
+        }
+        console.log(error)
+    }
+}
+
+const axiosJWT = axios.create();
+ 
+    axiosJWT.interceptors.request.use(async (config) => {
+        const currentDate = new Date();
+        if (expire * 1000 < currentDate.getTime()) {
+            const response = await axios.get('http://localhost:5000/token');
+            config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+            setToken(response.data.accessToken);
+            const decoded = jwt_decode(response.data.accessToken);
+            setName(decoded.name);
+            setExpire(decoded.exp);
+        }
+        return config;
+    }, (error) => {
+        return Promise.reject(error);
+    });
+ 
+    const getUsers = async () => {
+        const response = await axiosJWT.get('http://localhost:5000/users', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        setUsers(response.data);
+    }
+
+
+    console.log(users)
   return (
     <div className='relative'>
-      <div className="navbar sticky top-0 bg-glass flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
-        <div className="flex items-center gap-2"><div className="logo w-[64px] md:w-[72px]"><img className='w-full' src="../logo.png" alt="" /> </div> <span className='sp text-xl md:text-3xl font-bold'>Survey</span></div>
-        <div className="info flex gap-3 md:gap-4 items-center">
-          <div className="p-icon w-[24px] md:w-[32px]"><img className='w-full cursor-pointer' src="../user.png" alt="" /></div> <div className='text-sm'>Hi, <span className='name'>John Doe</span> </div> <div className='w-[20px] md:w-[24px] cursor-pointer'><img className='w-full' src="../menudown.png" alt="" /></div>
-        </div>
-      </div>
-      <div className="banner mt-16 w-full mx-auto flex flex-col justify-center items-center gap-2 md:gap-4">
-        <div className="heading-info text-2xl md:text-3xl">Welcome <span className='name font-bold'>John Doe</span></div>
-        <div className="sub-inf text-sm md:text-base font-light">To get started, you can take a <span className='font-medium'>survey</span></div>
-        <div ><button className="text-sm mt-3 rounded bg-teal-600 py-3 px-5 text-white">TAKE A SURVEY</button></div>
-      </div>
-      <div className="actions grid grid-cols-1 md:grid-cols-3 px-4 md:px-6 gap-5 md:gap-6 md:mt-12 mt-9 text-sm text-white">
-        <div className="action bg-teal-600 rounded-full flex items-center justify-center p-8 cursor-pointer">Take survey</div>
-        <div className="action bg-teal-600 rounded-full flex items-center justify-center p-8 cursor-pointer">View result</div>
-        <div className="action bg-teal-600 rounded-full flex items-center justify-center p-8 cursor-pointer">View Learning Material</div>
-      </div>
+      <DashboardNavbar name={name}/>
+      <DashboardBanner name={name}/>
+      <hr className='mt-14 border-[1px] rounded mx-4 border-gray-200 md:max-w-6xl md:mx-auto shadow'/>
+      <DashboardActions actions={{}}/>
     </div>
   )
 }

@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 *, *::before, *::after{
   margin:0;
   padding:0;
@@ -19,3 +20,4 @@ html,body {
 .sp{
   letter-spacing: 1px;
 }
+

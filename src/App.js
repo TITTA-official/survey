@@ -2,7 +2,7 @@ import React from 'react'
 import './App.css';
 
 import {
-  Routes,
+  Switch,
   Route,
   Link
 } from "react-router-dom";
@@ -15,13 +15,19 @@ function App() {
   return (
     
     <div className="">
-    
-        <Routes>
-          <Route path ="/" element={<LoginPage/>}/>
-          <Route path ="/signup" element={<SignupPage/>}/>
-          <Route path ="/dashboard" element={<DashboardPage/>}/>
-
-        </Routes>
+      
+        <Switch>
+          <Route exact path ="/">
+            <LoginPage/>
+          </Route>
+          <Route  path ="/register">
+            <SignupPage/>
+          </Route>
+          <Route path ="/dashboard">
+            <DashboardPage/>
+          </Route>
+          
+        </Switch>
     </div>
 
    

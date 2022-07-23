@@ -1,6 +1,6 @@
 
 .login-img{
-    background-image: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.25)), url('../public/loginpics.jpg');
+    background-image: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.25)), url('./loginpics.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
