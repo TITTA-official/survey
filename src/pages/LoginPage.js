@@ -17,7 +17,13 @@ function LoginPage() {
       });
       console.log(res);
       if (res.status === 200) {
-        history.push("/dashboard");
+        if (res.data.user.type === "superadmin") {
+          history.push("/dashboard-superadmin");
+        } else if (res.data.user.type === "admin") {
+          history.push("/dashboard-admin");
+        } else {
+          history.push("/dashboard");
+        }
       }
     } catch (error) {
       console.log(error);
@@ -57,6 +63,7 @@ function LoginPage() {
                 type="text"
                 className="w-[70%] text-base rounded bg-glass px-3 py-2 text-[#000]"
                 value={email}
+                required
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
@@ -68,6 +75,7 @@ function LoginPage() {
                 type="password"
                 className="w-[70%] text-base rounded bg-glass px-3 py-2 text-[#000]"
                 value={password}
+                required
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
