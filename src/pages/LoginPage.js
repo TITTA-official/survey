@@ -12,7 +12,7 @@ function LoginPage() {
     const Auth = async (e) => {
       e.preventDefault();
       try {
-          await axios.post('http://localhost:5000/login', {
+          await axios.post('http://localhost:8080/login', {
               email: email,
               password: password
           });
