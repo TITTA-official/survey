@@ -7,20 +7,19 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState(false);
   const [msg, setMsg] = useState("");
   const history = useHistory();
 
   const Register = async (e) => {
     e.preventDefault();
-    console.log(type);
     try {
       let res = await axios.post("/auth/register", {
         username: name,
         email: email,
         password: password,
         confPassword: confPassword,
-        type: type !== "" && type,
+        type: type ? true : false,
       });
       console.log(res);
       if (res.status === 201) {
