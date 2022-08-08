@@ -13,7 +13,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import SuperAdminDashboardPage from './pages/SuperAdminDashboardPage';
-import { SurveyShowProvider, ResultShowProvider, ViewLearningMaterialsProvider, ShowUploadLearningMaterialsProvider, ShowCreateQuestionsProvider, ShowAdminUsersListProvider, ShowAdminViewStatisticsProvider } from './context';
+import { SurveyShowProvider, ResultShowProvider, ViewLearningMaterialsProvider, ShowUploadLearningMaterialsProvider, ShowCreateQuestionsProvider, ShowAdminUsersListProvider, ShowAdminViewStatisticsProvider, ShowBoardOfUsersProvider } from './context';
 
 
 function App() {
@@ -47,7 +47,9 @@ function App() {
             <ResultShowProvider>
               <ShowAdminUsersListProvider>
                 <ShowAdminViewStatisticsProvider>
-                  <AdminDashboardPage/>
+                 
+                    <AdminDashboardPage/>
+                 
                 </ShowAdminViewStatisticsProvider>
               </ShowAdminUsersListProvider>
             </ResultShowProvider> 
@@ -57,7 +59,9 @@ function App() {
             </ShowCreateQuestionsProvider>
           </Route>
           <Route path="/dashboard-superadmin">
+          <ShowBoardOfUsersProvider>
             <SuperAdminDashboardPage/>
+          </ShowBoardOfUsersProvider>  
           </Route>
           
         </Switch>

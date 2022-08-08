@@ -1,11 +1,13 @@
 
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import DashboardNavbar from '../components/DashboardNavbar';
 import DashboardBanner from '../components/DashboardBanner';
 import DashboardActions from '../components/DashboardActions';
+import BoardOfUsers from '../components/BoardOfUsers';
 
+import {ShowBoardOfUsersContext} from '../context'
 
 function SuperAdminDashboardPage() {
     const [toggleMenu, setToggleMenu] = useState(false)
@@ -13,6 +15,8 @@ function SuperAdminDashboardPage() {
     const Logout = async () => {
       history.push('/')
   }
+
+  const [showBoardOfUsers, setShowBoardOfUsers] = useContext(ShowBoardOfUsersContext)
   return (
     <div className='relative'>
       <div className="navbar sticky top-0 bg-glass flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
@@ -35,8 +39,21 @@ function SuperAdminDashboardPage() {
         <div className="action bg-teal-600 rounded-full flex items-center justify-center py-14 cursor-pointer w-3/6 text-center px-6">View Statistics</div>
         <div className="action bg-teal-600 rounded-full flex items-center justify-center py-14 cursor-pointer w-3/6 text-center px-6">Generate Report</div>
         <div className="action bg-teal-600 rounded-full flex items-center justify-center py-14 cursor-pointer w-3/6 text-center px-6">Upload Learning Materials</div>
-        <div className="action bg-teal-600 rounded-full flex items-center justify-center py-14 cursor-pointer w-3/6 text-center px-6">Board of Admins</div>
+        <div onClick={() => setShowBoardOfUsers(!showBoardOfUsers)} className="action bg-teal-600 rounded-full flex items-center justify-center py-14 cursor-pointer w-3/6 text-center px-6">Board of Users</div>
       </div>
+
+
+      {
+          showBoardOfUsers &&
+          <div className={`fixed  top-0 w-screen h-screen bg-white overflow-y-scroll flex justify-center `}>
+            <div onClick={() => {
+                  setShowBoardOfUsers(!showBoardOfUsers)
+                  
+                }}
+            className="close absolute top-5  left-7 w-[16px] md:w-[18px] cursor-pointer "><img className='w-full h-full' src="../close.png" alt="" /></div>
+            <BoardOfUsers/>
+          </div>
+        }
     </div>
   )
 }

@@ -8,6 +8,7 @@ export const ViewLearningMaterialsContext = createContext();
 export const ShowCreateQuestionsContext = createContext();
 export const ShowAdminUsersListContext = createContext();
 export const ShowAdminViewStatisticsContext = createContext();
+export const ShowBoardOfUsersContext = createContext();
 
 export const SurveyShowProvider =(props) => {
     const [showSurvey, setShowSurvey] = useState(false)
@@ -16,6 +17,15 @@ export const SurveyShowProvider =(props) => {
         <SurveyShowContext.Provider value={[showSurvey, setShowSurvey]}>
             {props.children}
         </SurveyShowContext.Provider>
+    );
+}
+export const ShowBoardOfUsersProvider =(props) => {
+    const [showBoardOfUsers, setShowBoardOfUsers] = useState(false)
+    
+    return(
+        <ShowBoardOfUsersContext.Provider value={[showBoardOfUsers, setShowBoardOfUsers]}>
+            {props.children}
+        </ShowBoardOfUsersContext.Provider>
     );
 }
 export const ShowCreateQuestionsProvider =(props) => {
