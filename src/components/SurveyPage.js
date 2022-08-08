@@ -3,6 +3,7 @@ import {SurveyShowContext} from '../context'
 import {QuestionContext} from '../context'
 
 function SurveyPage() {
+  const [disabled, setDisabled] = useState(true)
   const [showSurvey, setShowSurvey] = useContext(SurveyShowContext)
   const [questions, setQuestions] = useContext(QuestionContext)
   // const [questions, setQuestions] = useContext(QuestionContext)
@@ -58,26 +59,29 @@ if(surveyEnd) {
 
   return (
     <div className=' w-full '>
-      {console.log(currentQuestion)}
+      {/* {console.log(currentQuestion)} */}
         <div className="s-nav px-6 py-4 font-medium w-full bg-glass flex justify-between text-xs"><span ><span className='opacity-60'>1. Survey. </span> <span className='font-medium'>Web Security and Awareness</span> </span>  <span className=''><span className='opacity-60'> Next Survey.</span> <span className='font-medium'>question question blah blah blah..</span></span></div>
         <div className="line border-b-2 w-full border-b-gray-100"></div>
         <div className="s-body py-5 px-6">
           <div onClick={() => setShowSurvey(!showSurvey)} className="close w-[16px] md:w-[18px]"><img className='w-full h-full cursor-pointer' src="../close.png" alt="" /></div>
             <div className="content flex justify-center flex-col items-center mt-16 gap-y-24">
               <div className="question max-w-screen-md flex flex-col gap-8">
-                <span className="font-medium text-sm md:text-lg leading-loose"><span className='font-bold'>{`Q${currentQuestionIndex+1}`}</span> {`${currentQuestion}`}</span>
+                <span className="font-bold text-lg md:text-2xl md:mb-6 leading-loose"><span className='font-bold'>{`Q${currentQuestionIndex+1}`}</span> {`${currentQuestion}`}</span>
                   
                 {/* return(<span className="font-medium text-sm md:text-lg leading-loose"><span className='font-bold'>{`Q${question.id}`}</span> {`${question.question}`}</span>) */}
                   
-                  <div className="text-sm md:text-base">
-                    <input type="text" className='w-full border-b border-gray-300 py-3 px-2' placeholder='Type your answer here'/>
+                  <div className="text-sm md:text-base flex flex-col gap-4 w-full">
+
+                    <label onClick={() => setDisabled(false)} htmlFor='yes' className='label'><div className="radio-grp border border-gray-400 px-3 py-4 font-semibold flex items-center rounded w-full gap-4 cursor-pointer"><input name='option' id='yes'  type="radio" className='option' /> <span className=''>Yes</span></div></label>  
+                    <label onClick={() => setDisabled(false)} htmlFor='no' className='label'><div className="radio-grp  border border-gray-400 px-3 py-4 font-semibold flex items-center rounded w-full gap-4 cursor-pointer"> <input name='option' id='no'  type="radio" className='option' /> <span className=''> No</span></div></label>   
+                    
                   </div>
-                    <button className='bg-teal-500 text-white w-1/6 py-3 text-sm md:text-base rounded'>OK</button>
+                    {/* <button className='bg-teal-500 text-white w-1/6 py-3 text-sm md:text-base rounded'>OK</button> */}
               </div>
               <div className="next-prev flex w-full items-center justify-between md:max-w-screen-md">
                   {currentQuestionIndex === 0 ? <button></button> : <button onClick={handlePrevQuestion}  className='border-2 border-teal-500 text-[#000]  py-3 px-4 text-sm md:text-base rounded'><span></span> Previous</button>}
                   {
-                    currentQuestionIndex < questions.length -1 && <button onClick={handleNextQuestion} className='bg-teal-500 text-[#fff] py-3 px-4 text-sm md:text-base rounded'><span></span> Next</button>
+                    currentQuestionIndex < questions.length -1 && <button onClick={handleNextQuestion} className={`bg-teal-500 text-[#fff] py-3 px-4 text-sm md:text-base rounded `} disabled={`${disabled}`}><span></span> Next</button>
                   }
                   {
                     currentQuestionIndex === questions.length -1 &&
