@@ -13,7 +13,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import SuperAdminDashboardPage from './pages/SuperAdminDashboardPage';
-import { SurveyShowProvider } from './context';
+import { SurveyShowProvider, ResultShowProvider, ViewLearningMaterialsProvider, ShowUploadLearningMaterialsProvider, ShowCreateQuestionsProvider, ShowAdminUsersListProvider, ShowAdminViewStatisticsProvider, ShowBoardOfUsersProvider } from './context';
 
 
 function App() {
@@ -29,18 +29,39 @@ function App() {
           <Route  path ="/register">
             <SignupPage/>
           </Route>
-          <Route path ="/dashboard">
+          <Route exact path ="/dashboard">
             
             <SurveyShowProvider>
-              <DashboardPage/>
+              <ResultShowProvider>
+                <ViewLearningMaterialsProvider>
+                  <DashboardPage/>
 
+                </ViewLearningMaterialsProvider>
+              </ResultShowProvider>
             </SurveyShowProvider>
           </Route>
           <Route path ="/dashboard-admin">
-            <AdminDashboardPage/>
+            <ShowCreateQuestionsProvider>
+            <ShowUploadLearningMaterialsProvider>
+            <ViewLearningMaterialsProvider>
+            <ResultShowProvider>
+              <ShowAdminUsersListProvider>
+                <ShowAdminViewStatisticsProvider>
+                 
+                    <AdminDashboardPage/>
+                 
+                </ShowAdminViewStatisticsProvider>
+              </ShowAdminUsersListProvider>
+            </ResultShowProvider> 
+              </ViewLearningMaterialsProvider>
+            </ShowUploadLearningMaterialsProvider>
+
+            </ShowCreateQuestionsProvider>
           </Route>
-          <Route path ="/dashboard-superadmin">
+          <Route path="/dashboard-superadmin">
+          <ShowBoardOfUsersProvider>
             <SuperAdminDashboardPage/>
+          </ShowBoardOfUsersProvider>  
           </Route>
           
         </Switch>

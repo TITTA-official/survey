@@ -57,10 +57,10 @@ function LoginPage() {
             <p>{msg}</p>
             <div className="flex items-center justify-between w-full input-group md:px-9">
               <label htmlFor="username" className="text-sm md:text-base">
-                User Name
+                Email
               </label>
               <input
-                type="text"
+                type="email"
                 className="w-[70%] text-base rounded bg-glass px-3 py-2 text-[#000]"
                 value={email}
                 required

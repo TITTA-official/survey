@@ -21,3 +21,37 @@ html,body {
   letter-spacing: 1px;
 }
 
+td{
+  @apply border-y border-gray-300 p-4 text-left;
+}
+
+.overflow-x-scroll-cm{
+  overflow-x:scroll !important;
+}
+
+
+.download-icon{
+  opacity:0;
+  transition: opacity .2s ease-in-out;
+}
+.delete-icon{
+  opacity:0;
+  transition: opacity .2s ease-in-out;
+}
+
+
+
+.resource:hover .download-icon{
+  opacity: 1;
+}
+.resource:hover .delete-icon{
+  opacity: 1;
+}
+
+.overflow-y-scoll-cm{
+  overflow-y: scroll !important;
+}
+
+
+
+
