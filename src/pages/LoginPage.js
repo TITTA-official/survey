@@ -1,31 +1,40 @@
-import React, { useState } from "react";
 import axios from "axios";
-import { Link, useHistory } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
+  const [, setUser] = useContext(AuthContext);
+  const [loading, setLoading] = useState(false)
 
   const Auth = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       let res = await axios.post("/auth/login", {
         email: email,
         password: password,
       });
-      console.log(res);
+      //console.log(res);
+      let data = res.data;
+      localStorage.setItem("token", data.token);
+      setUser(data.user);
+      setLoading(false)
       if (res.status === 200) {
-        if (res.data.user.type === "superadmin") {
-          history.push("/dashboard-superadmin");
-        } else if (res.data.user.type === "admin") {
-          history.push("/dashboard-admin");
+        if (data.user.type === "superadmin") {
+          navigate("/dashboard-superadmin");
+        } else if (data.user.type === "admin") {
+          navigate("/dashboard-admin");
         } else {
-          history.push("/dashboard");
+          navigate("/dashboard");
         }
       }
     } catch (error) {
+      setLoading(false)
       console.log(error);
       // if (error.response) {
       //     setMsg(error.response.data.msg);
@@ -80,8 +89,8 @@ function LoginPage() {
               />
             </div>
             <div className="w-full signupbtn md:px-9">
-              <button className="w-full px-5 py-3 mt-5 text-base border-none rounded bg-glass md:text-lg">
-                Login
+              <button disabled={loading} className="w-full px-5 py-3 mt-5 text-base border-none rounded bg-glass md:text-lg">
+                {loading ? "Loading...." : "Login"}
               </button>
             </div>
           </form>

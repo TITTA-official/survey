@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
+import { ShowAdminUsersListContext } from "../context";
 
 function AdminUsersList() {
+  const [data] = useContext(ShowAdminUsersListContext);
   return (
     <div className="bg-white py-6 px-4 w-[80%] max-w-screen-lg  mx-auto rounded-lg ">
-      <table className="w-full rounded table border-none table-auto">
+      <table className="table w-full border-none rounded table-auto">
         <thead className="text-left">
           <tr className="">
             <th>#</th>
@@ -13,62 +15,30 @@ function AdminUsersList() {
           </tr>
         </thead>
         <tbody className="">
-          <tr className="border-b">
-            <td>1</td>
-            <td className="flex items-center border-none gap-x-4 justify-start  ">
-              <div className=" w-[36px] prof-icon">
-                <img src="../user.png" className="w-full" alt="" />
-              </div>
-              tj
-            </td>
-            <td>tj@gmail.com</td>
-            <td>
-              {/* <select name="roles" id="roles">
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </select> */}
-              User
-            </td>
-          </tr>
-          <tr className="border-b">
-            <td>2</td>
-            <td className="flex items-center border-none gap-x-4 justify-start  ">
-              <div className=" w-[36px] prof-icon">
-                <img src="../user.png" className="w-full" alt="" />
-              </div>
-              tj
-            </td>
-            <td>tj@gmail.com</td>
-            <td>
-            User
-            </td>
-          </tr>
-          <tr className="border-b">
-            <td>3</td>
-            <td className="flex items-center border-none gap-x-4 justify-start ">
-              <div className=" w-[36px] prof-icon">
-                <img src="../user.png" className="w-full" alt="" />
-              </div>
-              tj
-            </td>
-            <td>tj@gmail.com</td>
-            <td>
-            User
-            </td>
-          </tr>
-          <tr className="border-b">
-            <td>4</td>
-            <td className="flex items-center border-none gap-x-4 justify-start ">
-              <div className=" w-[36px] prof-icon">
-                <img src="../user.png" className="w-full" alt="" />
-              </div>
-              tj
-            </td>
-            <td>tj@gmail.com</td>
-            <td>
-            User
-            </td>
-          </tr>
+          {data &&
+            data.map((user, index) => {
+              return (
+                user.type !== "admin" && (
+                  <tr className="border-b" key={user.id}>
+                    <td>{index + 1}</td>
+                    <td className="flex items-center justify-start border-none gap-x-4 ">
+                      <div className=" w-[36px] prof-icon">
+                        <img src="../user.png" className="w-full" alt="" />
+                      </div>
+                      {user.username}
+                    </td>
+                    <td>{user.email}</td>
+                    <td>
+                      {/* <select name="roles" id="roles">
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select> */}
+                      {user.type !== "admin" ? "user" : user.type}
+                    </td>
+                  </tr>
+                )
+              );
+            })}
         </tbody>
       </table>
     </div>
