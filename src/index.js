@@ -1,10 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
+import "./index.css";
 // import "bulma/css/bulma.css";
 import axios from "axios";
 import { BrowserRouter as Router } from "react-router-dom";
+import { AuthContextProvider } from "./context";
 
 //axios.defaults.withCredentials = true;
 axios.defaults.headers = { "Access-Control-Allow-Credentials": "*" };
@@ -13,9 +14,11 @@ axios.defaults.baseURL = "http://localhost:8080/api/v1/";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
+    <AuthContextProvider>
+      <Router>
+        <App />
+      </Router>
+    </AuthContextProvider>
   </React.StrictMode>
 );
 

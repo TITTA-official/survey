@@ -1,39 +1,44 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context";
 
 function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
-  const [type, setType] = useState(false);
   const [msg, setMsg] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
+  const [, setUser] = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const Register = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       let res = await axios.post("/auth/register", {
         username: name,
         email: email,
         password: password,
         confPassword: confPassword,
-        type: type ? true : false,
       });
-      console.log(res);
+      //console.log(res);
       if (res.status === 201) {
+        setUser(res.data.user);
+        setLoading(false);
         if (res.data.user.type === "superadmin") {
-          history.push("/dashboard-superadmin");
+          navigate("/dashboard-superadmin");
         } else if (res.data.user.type === "admin") {
-          history.push("/dashboard-admin");
+          navigate("/dashboard-admin");
         } else {
-          history.push("/dashboard");
+          navigate("/dashboard");
         }
       }
     } catch (error) {
       if (error.response) {
         setMsg(error.response.data.msg);
+        setLoading(false);
         console.log(msg);
       }
     }
@@ -99,20 +104,12 @@ function SignupPage() {
                 className="w-[70%] text-base rounded bg-glass px-3 py-2 text-[#000]"
               />
             </div>
-            <div className="flex items-center justify-start w-full gap-3 input-group md:text-lg md:px-9">
-              <input
-                value="admin"
-                onChange={(e) => setType(e.target.value)}
-                type="checkbox"
-                id="type"
-              />
-              <label htmlFor="type" className="text-sm">
-                Register as an Administrator
-              </label>
-            </div>
             <div className="w-full signupbtn md:px-9">
-              <button className="w-full px-5 py-3 mt-5 text-base border-none rounded bg-glass md:text-lg">
-                Sign Up
+              <button
+                disabled={loading}
+                className="w-full px-5 py-3 mt-5 text-base border-none rounded bg-glass md:text-lg"
+              >
+                {loading ? "Loading..." : "Sign Up"}
               </button>
             </div>
           </form>

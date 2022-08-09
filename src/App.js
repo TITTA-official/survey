@@ -1,73 +1,121 @@
-import React from 'react'
-import './App.css';
+import React, { useContext, useEffect, useState } from "react";
+import "./App.css";
 
+import { Route, Routes, useNavigate } from "react-router-dom";
 
+import axios from "axios";
 import {
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-
-import SignupPage from './pages/SignupPage';
-import LoginPage from './pages/LoginPage';
-import DashboardPage from './pages/DashboardPage';
-import AdminDashboardPage from './pages/AdminDashboardPage';
-import SuperAdminDashboardPage from './pages/SuperAdminDashboardPage';
-import { SurveyShowProvider, ResultShowProvider, ViewLearningMaterialsProvider, ShowUploadLearningMaterialsProvider, ShowCreateQuestionsProvider, ShowAdminUsersListProvider, ShowAdminViewStatisticsProvider, ShowBoardOfUsersProvider } from './context';
-
+  AuthContext,
+  AuthContextProvider,
+  ResultShowProvider,
+  ShowAdminUsersListProvider,
+  ShowAdminViewStatisticsProvider,
+  ShowBoardOfUsersProvider,
+  ShowCreateQuestionsProvider,
+  ShowUploadLearningMaterialsProvider,
+  SurveyShowProvider,
+  ViewLearningMaterialsProvider,
+} from "./context";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
+import DashboardPage from "./pages/DashboardPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import SuperAdminDashboardPage from "./pages/SuperAdminDashboardPage";
+import PrivateRoute from "./PrivateRoute";
+import PublicRoute from "./PublicRoute";
 
 function App() {
- 
-  
+  let token = localStorage.getItem("token");
+  const [user, setUser] = useContext(AuthContext)
+
+  useEffect(() => {
+    if (token) {
+      const authenticateUser = () => {
+        axios
+          .get("/authenticate", {
+            headers: {
+              authorization: "Bearer " + token,
+            },
+          })
+          .then((res) => {
+            setUser(res?.data?.user);
+          })
+          .catch((err) => console.error(err));
+      };
+      authenticateUser();
+    }
+  }, [token, setUser]);
+
+
   return (
     <div className="">
-      
-        <Switch>
-          <Route exact path ="/">
-            <LoginPage/>
-          </Route>
-          <Route  path ="/register">
-            <SignupPage/>
-          </Route>
-          <Route exact path ="/dashboard">
-            
-            <SurveyShowProvider>
-              <ResultShowProvider>
-                <ViewLearningMaterialsProvider>
-                  <DashboardPage/>
+      <Routes>
+        <Route
+          index
+          path="/"
+          element={
+            <PublicRoute user={user}>
+              <LoginPage />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute user={user}>
+              <SignupPage />
+            </PublicRoute>
+          }
+        />
 
-                </ViewLearningMaterialsProvider>
-              </ResultShowProvider>
-            </SurveyShowProvider>
-          </Route>
-          <Route path ="/dashboard-admin">
-            <ShowCreateQuestionsProvider>
-            <ShowUploadLearningMaterialsProvider>
-            <ViewLearningMaterialsProvider>
-            <ResultShowProvider>
-              <ShowAdminUsersListProvider>
-                <ShowAdminViewStatisticsProvider>
-                 
-                    <AdminDashboardPage/>
-                 
-                </ShowAdminViewStatisticsProvider>
-              </ShowAdminUsersListProvider>
-            </ResultShowProvider> 
-              </ViewLearningMaterialsProvider>
-            </ShowUploadLearningMaterialsProvider>
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute user={user}>
+              <SurveyShowProvider>
+                <ResultShowProvider>
+                  <ViewLearningMaterialsProvider>
+                    <DashboardPage user={user} />
+                  </ViewLearningMaterialsProvider>
+                </ResultShowProvider>
+              </SurveyShowProvider>
+            </PrivateRoute>
+          }
+        />
 
-            </ShowCreateQuestionsProvider>
-          </Route>
-          <Route path="/dashboard-superadmin">
-          <ShowBoardOfUsersProvider>
-            <SuperAdminDashboardPage/>
-          </ShowBoardOfUsersProvider>  
-          </Route>
-          
-        </Switch>
+        <Route
+          path="/dashboard-admin"
+          element={
+            <PrivateRoute user={user}>
+              <ShowCreateQuestionsProvider>
+                <ShowUploadLearningMaterialsProvider>
+                  <ViewLearningMaterialsProvider>
+                    <ResultShowProvider>
+                      <ShowAdminUsersListProvider>
+                        <ShowAdminViewStatisticsProvider>
+                          <AdminDashboardPage user={user} />
+                        </ShowAdminViewStatisticsProvider>
+                      </ShowAdminUsersListProvider>
+                    </ResultShowProvider>
+                  </ViewLearningMaterialsProvider>
+                </ShowUploadLearningMaterialsProvider>
+              </ShowCreateQuestionsProvider>
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard-superadmin"
+          element={
+            <PrivateRoute user={user}>
+              <ShowBoardOfUsersProvider>
+                <SuperAdminDashboardPage user={user} />
+              </ShowBoardOfUsersProvider>
+            </PrivateRoute>
+          }
+        />
+      </Routes>
     </div>
-
-   
   );
 }
 
