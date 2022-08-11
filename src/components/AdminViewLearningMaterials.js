@@ -11,6 +11,7 @@ function AdminViewLearningMaterials() {
   useEffect(() => {
     const getAllResources = async () => {
       setLoading(true);
+      setDeleted(false);
       try {
         const res = await axios.get("/resources/all", {
           headers: {
@@ -45,6 +46,7 @@ function AdminViewLearningMaterials() {
       setDeleted(true);
     } catch (error) {
       setLoading(false);
+      setDeleted(false);
       console.error(error);
     }
   };
