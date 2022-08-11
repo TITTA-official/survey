@@ -1,26 +1,27 @@
-import React, { useState, useContext, useEffect } from "react";
-import { SurveyShowContext } from "../context";
-import { QuestionContext } from "../context";
+import React, { useContext, useEffect, useState } from "react";
+import { QuestionContext, SurveyShowContext } from "../context";
 
 function SurveyPage() {
   const [disabled, setDisabled] = useState(true);
   const [showSurvey, setShowSurvey] = useContext(SurveyShowContext);
-  const [questions, setQuestions] = useContext(QuestionContext);
+  const [questions] = useContext(QuestionContext);
   // const [questions, setQuestions] = useContext(QuestionContext)
   // let currentQuestion = 0;
-  const [currentQuestion, setCurrentQuestion] = useState();
+  const [currentQuestion, setCurrentQuestion] = useState("");
   const [surveyEnd, setSurveyEnd] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   let filteredQuestion;
   filteredQuestion = questions.filter((question, index) => {
     return index === currentQuestionIndex;
   });
-  const loadQuestion = () => {
-    setCurrentQuestion(filteredQuestion[currentQuestionIndex].question);
-  };
   useEffect(() => {
+    const loadQuestion = () => {
+      setCurrentQuestion(filteredQuestion[currentQuestionIndex].question);
+    };
     loadQuestion();
-  }, []);
+  }, [currentQuestionIndex, filteredQuestion]);
+
+  console.log(filteredQuestion);
 
   const handleNextQuestion = () => {
     setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -94,9 +95,9 @@ function SurveyPage() {
         <div className="flex flex-col items-center justify-center mt-16 content gap-y-24">
           <div className="flex flex-col max-w-screen-md gap-8 question">
             <span className="text-lg font-bold leading-loose md:text-2xl md:mb-6">
-              <span className="font-bold">{`Q${
-                currentQuestionIndex + 1
-              }`}</span>{" "}
+              <span className="font-bold">
+                {`Q${currentQuestionIndex + 1}`}:
+              </span>{" "}
               {`${currentQuestion}`}
             </span>
 

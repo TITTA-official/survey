@@ -9,7 +9,7 @@ function LoginPage() {
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
   const [, setUser] = useContext(AuthContext);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const Auth = async (e) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ function LoginPage() {
       let data = res.data;
       localStorage.setItem("token", data.token);
       setUser(data.user);
-      setLoading(false)
+      setLoading(false);
       if (res.status === 200) {
         if (data.user.type === "superadmin") {
           navigate("/dashboard-superadmin");
@@ -34,7 +34,7 @@ function LoginPage() {
         }
       }
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       console.log(error);
       // if (error.response) {
       //     setMsg(error.response.data.msg);
@@ -89,7 +89,10 @@ function LoginPage() {
               />
             </div>
             <div className="w-full signupbtn md:px-9">
-              <button disabled={loading} className="w-full px-5 py-3 mt-5 text-base border-none rounded bg-glass md:text-lg">
+              <button
+                disabled={loading}
+                className="w-full px-5 py-3 mt-5 text-base border-none rounded bg-glass md:text-lg"
+              >
                 {loading ? "Loading...." : "Login"}
               </button>
             </div>

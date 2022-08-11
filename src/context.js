@@ -154,8 +154,26 @@ export const QuestionProvider = (props) => {
     },
   ]);
 
+  let token = localStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      const getSurvey = async () => {
+        let res = await axios.get("/admin/survey", {
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        });
+        let survey = res.data.results[0].survey.map((question, id) => {
+          return { question: question.question, id };
+        });
+        setQuestions(survey);
+      };
+      getSurvey();
+    }
+  }, [token]);
+
   return (
-    <QuestionContext.Provider value={[questions, setQuestions]}>
+    <QuestionContext.Provider value={[questions]}>
       {props.children}
     </QuestionContext.Provider>
   );
