@@ -5,8 +5,6 @@ function SurveyPage() {
   const [disabled, setDisabled] = useState(true);
   const [showSurvey, setShowSurvey] = useContext(SurveyShowContext);
   const [questions] = useContext(QuestionContext);
-  // const [questions, setQuestions] = useContext(QuestionContext)
-  // let currentQuestion = 0;
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [surveyEnd, setSurveyEnd] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -15,23 +13,20 @@ function SurveyPage() {
     return index === currentQuestionIndex;
   });
   useEffect(() => {
-    const loadQuestion = () => {
-      setCurrentQuestion(filteredQuestion[currentQuestionIndex].question);
-    };
-    loadQuestion();
-  }, [currentQuestionIndex, filteredQuestion]);
-
-  console.log(filteredQuestion);
+    if (questions.length > 0) {
+      const loadQuestion = () => {
+        setCurrentQuestion(filteredQuestion[currentQuestionIndex].question);
+      };
+      loadQuestion();
+    }
+  }, [currentQuestionIndex, filteredQuestion, questions]);
 
   const handleNextQuestion = () => {
     setCurrentQuestionIndex(currentQuestionIndex + 1);
-    // console.log(filteredQuestion)
   };
   const handlePrevQuestion = () => {
     setCurrentQuestionIndex(currentQuestionIndex - 1);
-    // console.log(filteredQuestion)
   };
-  console.log(currentQuestionIndex);
 
   const finishHandler = () => {
     if (currentQuestionIndex === questions.length - 1) {
@@ -67,7 +62,6 @@ function SurveyPage() {
 
   return (
     <div className="w-full ">
-      {/* {console.log(currentQuestion)} */}
       <div className="flex justify-between w-full px-6 py-4 text-xs font-medium s-nav bg-glass">
         <span>
           <span className="opacity-60">1. Survey. </span>{" "}

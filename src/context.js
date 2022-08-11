@@ -127,32 +127,7 @@ export const ShowAdminUsersListProvider = (props) => {
 };
 
 export const QuestionProvider = (props) => {
-  const [questions, setQuestions] = useState([
-    {
-      id: 1,
-      question: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    },
-    {
-      id: 2,
-      question: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    },
-    {
-      id: 3,
-      question: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    },
-    {
-      id: 4,
-      question: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    },
-    {
-      id: 5,
-      question: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    },
-    {
-      id: 6,
-      question: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    },
-  ]);
+  const [questions, setQuestions] = useState([]);
 
   let token = localStorage.getItem("token");
   useEffect(() => {
