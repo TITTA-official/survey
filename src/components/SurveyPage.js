@@ -8,7 +8,6 @@ function SurveyPage() {
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [surveyEnd, setSurveyEnd] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  console.log(questions);
   // let filteredQuestion;
   // filteredQuestion = questions.filter((question, index) => {
   //   return index === currentQuestionIndex;

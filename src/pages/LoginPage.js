@@ -20,11 +20,11 @@ function LoginPage() {
         password: password,
       });
       //console.log(res);
-      let data = res.data;
-      localStorage.setItem("token", data.token);
-      setUser(data.user);
       setLoading(false);
       if (res.status === 200) {
+        let data = res.data;
+        localStorage.setItem("token", data.token);
+        setUser(data.user);
         if (data.user.type === "superadmin") {
           navigate("/dashboard-superadmin");
         } else if (data.user.type === "admin") {

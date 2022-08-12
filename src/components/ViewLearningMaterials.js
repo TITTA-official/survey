@@ -34,7 +34,7 @@ function ViewLearningMaterials() {
         <div className="w-full mb-12 text-lg font-bold text-center heding md:text-2xl">
           <h2>View Learning Materials</h2>
           {(resources.length && !loading) === 0 && (
-            <p className="text-xs mt-3 font-medium">No resources.</p>
+            <p className="mt-3 text-xs font-medium">No resources.</p>
           )}
         </div>
         <div className="grid grid-cols-1 gap-6 mt-10 resources md:grid-cols-3 place-items-center">
@@ -47,9 +47,9 @@ function ViewLearningMaterials() {
                 <div className="icon w-[64px]">
                   <img src="../pdf.png" alt="" />
                 </div>
-                <div className="font-semibold nameofcontent">{r.name}</div>
+                <div className="font-semibold nameofcontent">{r.filename}</div>
                 <a
-                  href={`http://localhost:8080/api/v1/resources/${r.filename}`}
+                  href={r.file}
                   target="_blank"
                   rel="noreferrer noopener"
                   download
