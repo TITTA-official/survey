@@ -138,10 +138,8 @@ export const QuestionProvider = (props) => {
             authorization: "Bearer " + token,
           },
         });
-        let survey = res.data.results[0].survey.map((question, id) => {
-          return { question: question.question, id };
-        });
-        setQuestions(survey);
+
+        setQuestions(res.data.results);
       };
       getSurvey();
     }

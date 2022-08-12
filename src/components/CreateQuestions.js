@@ -6,6 +6,8 @@ function CreateQuestions() {
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
   const [user] = useContext(AuthContext);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -13,13 +15,9 @@ function CreateQuestions() {
     let token = localStorage.getItem("token");
     try {
       const res = await axios.post(
-        "/admin/post_survey",
+        "/admin/survey/post_question",
         {
-          survey: [
-            {
-              question,
-            },
-          ],
+          question,
           adminID: user.id,
         },
         {
@@ -29,9 +27,12 @@ function CreateQuestions() {
         }
       );
       console.log(res);
+      setMessage(res.data.message);
+      setQuestion("");
       setLoading(false);
     } catch (error) {
       setLoading(false);
+      setError(error.response.data.error);
       console.error(error);
     }
   };
@@ -42,6 +43,10 @@ function CreateQuestions() {
     >
       <div className="mb-4 text-base font-bold md:text-lg">
         <p>Question</p>
+        {message && <p className="text-xs font-medium capitalize">{message}</p>}
+        {error && (
+          <p className="text-xs font-medium text-red-500 capitalize">{error}</p>
+        )}
       </div>
       <div className="flex items-center justify-center w-full cursor-pointer ">
         <input

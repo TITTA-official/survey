@@ -1,11 +1,13 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { ShowUploadLearningMaterialsContext } from "../context.js";
 
 function UploadLearningMaterials() {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     accept: "application/pdf",
@@ -38,29 +40,38 @@ function UploadLearningMaterials() {
     </div>
   ));
   const [showUploadLearningMaterials, setShowUploadLearningMaterials] =
-    React.useContext(ShowUploadLearningMaterialsContext);
+    useContext(ShowUploadLearningMaterialsContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (files.length !== 0) {
       setLoading(true);
       let token = localStorage.getItem("token");
-      const form = new FormData();
-      form.append("file", files[0], files[0].name);
-      setLoading(false);
-      try {
-        const res = await axios.post("/admin/upload", form, {
-          headers: {
-            Authorization: "Bearer " + token,
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log(res);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        console.error(error);
-      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onerror = (error) => new Error(error);
+      reader.onload = async () => {
+        try {
+          const res = await axios.post(
+            "/admin/upload",
+            { file: reader.result, filename: files[0].name },
+            {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            }
+          );
+          console.log(res);
+          setFiles([]);
+          setLoading(false);
+          setMessage(res.data.message);
+        } catch (error) {
+          setLoading(false);
+          setError(error.response.data.error);
+          console.error(error);
+        }
+      };
     }
   };
   return (
@@ -71,12 +82,16 @@ function UploadLearningMaterials() {
     >
       <div className="mb-4 text-base font-bold md:text-lg">
         <p>Upload</p>
+        {message && <p className="text-xs font-medium capitalize">{message}</p>}
+        {error && (
+          <p className="text-xs font-medium text-red-500 capitalize">{error}</p>
+        )}
       </div>
       <div className=" bg-gray-100 w-full flex justify-center items-center py-12 border-dashed  border-4 border-gray-300 rounded-lg hover:scale-[1.015] transition-transform cursor-pointer">
         <input
-          type="text"
-          {...getInputProps({ className: "dropzone" })}
+          type="file"
           name="file"
+          {...getInputProps({ className: "dropzone" })}
         />
         <p>Drop your files here or click to browse </p>
       </div>

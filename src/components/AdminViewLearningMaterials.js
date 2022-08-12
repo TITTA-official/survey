@@ -18,7 +18,7 @@ function AdminViewLearningMaterials() {
             Authorization: "Bearer " + token,
           },
         });
-        //console.log(res);
+        console.log(res);
         if (res) {
           setResources(res.data.results);
         }
@@ -34,15 +34,12 @@ function AdminViewLearningMaterials() {
   const deleteResource = async (id) => {
     setLoading(true);
     try {
-      const res = await axios.delete(`/admin/upload/${id}`, {
+      const res = await axios.delete(`/admin/resources/${id}`, {
         headers: {
           Authorization: "Bearer " + token,
         },
       });
       console.log(res);
-      if (res) {
-        console.log(res);
-      }
       setDeleted(true);
     } catch (error) {
       setLoading(false);
@@ -56,7 +53,7 @@ function AdminViewLearningMaterials() {
         <div className="w-full mb-12 text-lg font-bold text-center heding md:text-2xl">
           <h2>View Learning Materials</h2>
           {(resources.length && !loading) === 0 && (
-            <p className="text-xs mt-3 font-medium">
+            <p className="mt-3 text-xs font-medium">
               No resources. Try uploading
             </p>
           )}
@@ -71,7 +68,7 @@ function AdminViewLearningMaterials() {
                 <div className="icon w-[64px]">
                   <img src="../pdf.png" alt="" />
                 </div>
-                <div className="font-semibold nameofcontent">{r.name}</div>
+                <div className="font-semibold nameofcontent">{r.filename}</div>
                 <div
                   onClick={() => deleteResource(r.fileID)}
                   className="delete-icon w-[50px] h-[50px] rounded-full absolute -bottom-0 left-1 bg-red-600 flex justify-center items-center"
@@ -79,10 +76,10 @@ function AdminViewLearningMaterials() {
                   <img className="w-[24px]" src="../delete.png" alt="" />
                 </div>
                 <a
-                  href={`http://localhost:8080/api/v1/resources/${r.filename}`}
+                  href={r.file}
                   target="_blank"
                   rel="noreferrer noopener"
-                  download
+                  download={r.filename}
                 >
                   <div className="download-icon w-[50px] h-[50px] rounded-full absolute -bottom-3 -right-2 bg-teal-600 flex justify-center items-center">
                     <img className="w-[16px]" src="../downloads.png" alt="" />

@@ -8,18 +8,19 @@ function SurveyPage() {
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [surveyEnd, setSurveyEnd] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  let filteredQuestion;
-  filteredQuestion = questions.filter((question, index) => {
-    return index === currentQuestionIndex;
-  });
+  console.log(questions);
+  // let filteredQuestion;
+  // filteredQuestion = questions.filter((question, index) => {
+  //   return index === currentQuestionIndex;
+  // });
   useEffect(() => {
     if (questions.length > 0) {
       const loadQuestion = () => {
-        setCurrentQuestion(filteredQuestion[currentQuestionIndex].question);
+        setCurrentQuestion(questions[currentQuestionIndex].question);
       };
       loadQuestion();
     }
-  }, [currentQuestionIndex, filteredQuestion, questions]);
+  }, [currentQuestionIndex, questions]);
 
   const handleNextQuestion = () => {
     setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -64,14 +65,21 @@ function SurveyPage() {
     <div className="w-full ">
       <div className="flex justify-between w-full px-6 py-4 text-xs font-medium s-nav bg-glass">
         <span>
-          <span className="opacity-60">1. Survey. </span>{" "}
-          <span className="font-medium">Web Security and Awareness</span>{" "}
+          <span className="opacity-60">
+            {currentQuestionIndex + 1}. Survey.{" "}
+          </span>{" "}
+          <span className="font-medium">{currentQuestion}</span>{" "}
         </span>{" "}
         <span className="">
-          <span className="opacity-60"> Next Survey.</span>{" "}
-          <span className="font-medium">
-            question question blah blah blah..
-          </span>
+          {questions.length > 1 &&
+            questions[currentQuestionIndex + 1]?.question && (
+              <>
+                <span className="opacity-60"> Next Survey.</span>{" "}
+                <span className="font-medium">
+                  {questions[currentQuestionIndex + 1]?.question}
+                </span>
+              </>
+            )}
         </span>
       </div>
       <div className="w-full border-b-2 line border-b-gray-100"></div>
@@ -146,10 +154,10 @@ function SurveyPage() {
             {currentQuestionIndex < questions.length - 1 && (
               <button
                 onClick={handleNextQuestion}
-                className={`bg-teal-500 text-[#fff] py-3 px-4 text-sm md:text-base rounded `}
+                className={`bg-teal-500 text-[#fff] py-3 px-4 text-sm md:text-base rounded`}
                 disabled={disabled}
               >
-                <span></span> Next
+                Next
               </button>
             )}
             {currentQuestionIndex === questions.length - 1 && (

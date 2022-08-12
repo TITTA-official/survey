@@ -36,10 +36,9 @@ function LoginPage() {
     } catch (error) {
       setLoading(false);
       console.log(error);
-      // if (error.response) {
-      //     setMsg(error.response.data.msg);
-      //     console.log(msg)
-      // }
+      if (error) {
+        setMsg(error.response.data.error);
+      }
     }
   };
 
@@ -63,7 +62,7 @@ function LoginPage() {
                 </Link>
               </span>
             </div>
-            <p>{msg}</p>
+            {msg && <p className="text-xs text-red-500">{msg}</p>}
             <div className="flex items-center justify-between w-full input-group md:px-9">
               <label htmlFor="username" className="text-sm md:text-base">
                 Email

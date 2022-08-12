@@ -24,9 +24,9 @@ function SignupPage() {
         confPassword: confPassword,
       });
       //console.log(res);
+      setLoading(false);
       if (res.status === 201) {
         setUser(res.data.user);
-        setLoading(false);
         if (res.data.user.type === "superadmin") {
           navigate("/dashboard-superadmin");
         } else if (res.data.user.type === "admin") {
@@ -36,11 +36,10 @@ function SignupPage() {
         }
       }
     } catch (error) {
-      if (error.response) {
-        setMsg(error.response.data.msg);
-        setLoading(false);
-        console.log(msg);
+      if (error) {
+        setMsg(error.response.data.error);
       }
+      setLoading(false);
     }
   };
   return (
@@ -63,7 +62,7 @@ function SignupPage() {
                 </Link>
               </span>
             </div>
-            <p>{msg}</p>
+            {msg && <p className="text-xs text-red-400">{msg}</p>}
             <div className="flex items-center justify-between w-full input-group md:text-lg md:px-9">
               <label htmlFor="username">User Name</label>
               <input
