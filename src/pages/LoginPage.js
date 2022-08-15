@@ -62,7 +62,7 @@ function LoginPage() {
                 </Link>
               </span>
             </div>
-            {msg && <p className="text-xs text-red-600">{msg}</p>}
+            {msg && <p className="text-sm font-semibold text-red-600">{msg}</p>}
             <div className="flex items-center justify-between w-full input-group md:px-9">
               <label htmlFor="username" className="text-sm md:text-base">
                 Email
