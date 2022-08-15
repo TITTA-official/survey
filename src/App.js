@@ -26,10 +26,10 @@ import PublicRoute from "./PublicRoute";
 
 function App() {
   let token = localStorage.getItem("token");
-  const [user, setUser] = useContext(AuthContext)
+  const [user, setUser] = useContext(AuthContext);
 
   useEffect(() => {
-    if (token) {
+    if (token !== null && token !== "undefined") {
       const authenticateUser = () => {
         axios
           .get("/authenticate", {
@@ -45,7 +45,6 @@ function App() {
       authenticateUser();
     }
   }, [token, setUser]);
-
 
   return (
     <div className="">
