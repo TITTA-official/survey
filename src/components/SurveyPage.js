@@ -116,10 +116,10 @@ function SurveyPage() {
         <div className="flex flex-col items-center justify-center gap-3 px-8 py-6 rounded-lg shadow-md md:py-20 md:px-28 bg-slate-50">
           <h3 className="text-lg font-bold md:text-4xl">Survey Complete!</h3>
           <p className="-mt-2 text-xs md:text-sm opacity-70 md:opacity-60 md:mt-2">
-            Click the button below to view results
+            Go back to view results
           </p>
-          <button className="px-6 py-4 mt-4 text-sm text-white bg-teal-500 rounded hover:shadow-xl md:text-base">
-            View Result
+          <button onClick={() => setShowSurvey(!showSurvey)} className="px-6 py-4 mt-4 text-sm text-white bg-teal-500 rounded hover:shadow-xl md:text-base">
+            Back to Dashboard
           </button>
         </div>
       </div>
