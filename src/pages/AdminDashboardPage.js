@@ -25,7 +25,9 @@ import {
   ShowUploadLearningMaterialsContext,
   ShowUploadLearningMaterialsProvider,
   ViewLearningMaterialsContext,
+  ShowViewSurveyQuestionsContext
 } from "../context";
+import ViewSurveyQuestions from "../components/ViewSurveyQuestions";
 
 function AdminDashboardPage({ user }) {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -39,6 +41,9 @@ function AdminDashboardPage({ user }) {
   };
   const [showCreateQuestions, setShowCreateQuestions] = useContext(
     ShowCreateQuestionsContext
+  );
+  const [showViewSurveyQuestions, setShowViewSurveyQuestions] = useContext(
+    ShowViewSurveyQuestionsContext
   );
   const [showViewLearningMaterials, setShowViewLearningMaterials] = useContext(
     ViewLearningMaterialsContext
@@ -116,6 +121,12 @@ function AdminDashboardPage({ user }) {
           Create Survey Questions
         </div>
         <div
+          onClick={() => setShowViewSurveyQuestions(!showViewSurveyQuestions)}
+          className="flex items-center justify-center w-3/6 px-6 text-center bg-teal-600 rounded-full cursor-pointer action py-14"
+        >
+          View Survey Questions
+        </div>
+        <div
           onClick={() => setShowResult(!showResult)}
           className="flex items-center justify-center w-3/6 px-6 text-center bg-teal-600 rounded-full cursor-pointer action py-14"
         >
@@ -181,6 +192,8 @@ function AdminDashboardPage({ user }) {
           </div>
         </ShowUploadLearningMaterialsProvider>
       )}
+
+
       {showAdminUsersList && (
         <div
           className={` fixed z-50 top-0 w-screen overflow-auto h-screen bg-gray-200 flex justify-center items-center`}
@@ -196,6 +209,24 @@ function AdminDashboardPage({ user }) {
           <AdminUsersList data={adminUsersListState} />
         </div>
       )}
+
+
+      {showViewSurveyQuestions && (
+        <div
+          className={` fixed z-50 top-0 w-screen overflow-auto h-screen bg-gray-200 flex justify-center items-start`}
+        >
+          <div
+            onClick={() => {
+              setShowViewSurveyQuestions(!showViewSurveyQuestions);
+            }}
+            className="close absolute top-5 z-20 left-7 w-[16px] md:w-[18px] cursor-pointer "
+          >
+            <img className="w-full h-full" src="../close.png" alt="" />
+          </div>
+          <ViewSurveyQuestions/>
+        </div>
+      )}
+
 
       {showCreateQuestions && (
         <ShowCreateQuestionsProvider>

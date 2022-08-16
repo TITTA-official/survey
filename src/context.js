@@ -12,6 +12,7 @@ export const ShowAdminViewStatisticsContext = createContext();
 export const ShowBoardOfUsersContext = createContext();
 export const ChoiceContext = createContext();
 export const ScoreContext = createContext();
+export const ShowViewSurveyQuestionsContext = createContext();
 
 //authencation and users details
 export const AuthContext = createContext();
@@ -32,6 +33,15 @@ export const SurveyShowProvider = (props) => {
     <SurveyShowContext.Provider value={[showSurvey, setShowSurvey]}>
       {props.children}
     </SurveyShowContext.Provider>
+  );
+};
+export const ShowViewSurveyQuestionsProvider = (props) => {
+  const [showViewSurveyQuestions, setShowViewSurveyQuestions] = useState(false);
+
+  return (
+    <ShowViewSurveyQuestionsContext.Provider value={[showViewSurveyQuestions, setShowViewSurveyQuestions]}>
+      {props.children}
+    </ShowViewSurveyQuestionsContext.Provider>
   );
 };
 export const ChoiceProvider = (props) => {
