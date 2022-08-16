@@ -15,6 +15,9 @@ import {
   ShowUploadLearningMaterialsProvider,
   SurveyShowProvider,
   ViewLearningMaterialsProvider,
+  ChoiceProvider,
+  ScoreProvider,
+  QuestionProvider
 } from "./context";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -74,7 +77,14 @@ function App() {
               <SurveyShowProvider>
                 <ResultShowProvider>
                   <ViewLearningMaterialsProvider>
-                    <DashboardPage user={user} />
+                    <ChoiceProvider>
+                      <ScoreProvider>
+                        <QuestionProvider>
+                        <DashboardPage user={user} />
+
+                        </QuestionProvider>
+                      </ScoreProvider>
+                    </ChoiceProvider>
                   </ViewLearningMaterialsProvider>
                 </ResultShowProvider>
               </SurveyShowProvider>
@@ -92,7 +102,14 @@ function App() {
                     <ResultShowProvider>
                       <ShowAdminUsersListProvider>
                         <ShowAdminViewStatisticsProvider>
-                          <AdminDashboardPage user={user} />
+                          <ChoiceProvider>
+                            <ScoreProvider>
+                              <QuestionProvider>
+                              <AdminDashboardPage user={user} />
+
+                              </QuestionProvider>
+                            </ScoreProvider>
+                          </ChoiceProvider>
                         </ShowAdminViewStatisticsProvider>
                       </ShowAdminUsersListProvider>
                     </ResultShowProvider>
@@ -108,7 +125,14 @@ function App() {
           element={
             <PrivateRoute user={user}>
               <ShowBoardOfUsersProvider>
-                <SuperAdminDashboardPage user={user} />
+                <ChoiceProvider>
+                  <ScoreProvider>
+                    <QuestionProvider>
+                    <SuperAdminDashboardPage user={user} />
+
+                    </QuestionProvider>
+                  </ScoreProvider>
+                </ChoiceProvider>
               </ShowBoardOfUsersProvider>
             </PrivateRoute>
           }

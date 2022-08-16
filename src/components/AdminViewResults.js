@@ -1,115 +1,57 @@
 import React, {useContext, useState} from 'react'
 import {ResultShowContext, ResultShowProvider} from '../context'
+import { ShowAdminUsersListContext,  QuestionContext, ScoreContext} from "../context";
 
 function ViewResults() {
   
   const [showResult, setShowResult] = useContext(ResultShowContext)
-  
+  const [data] = useContext(ShowAdminUsersListContext);
+  const [questions] = useContext(QuestionContext);
+  // const [score, setScore] = useContext(ScoreContext);
     // const [newshowResult, setShowResult] = useState(showResult)
 
   return (
-    <div className={`text-[#000]  overflow-x-hidden  px-4`}>
+    <div className={`text-[#000]   px-4`}>
       
-    <div className="mt-32 md:max-w-screen-lg max-h-[500px] overflow-x-scroll-cm  overflow-y-scroll">
+    <div className="mt-32 md:max-w-screen-lg">
     <div className="heding font-medium">Results for <span className='font-bold'>all users</span></div>
     {/* <hr className='mt-5 border border-gray-300'/> */}
     <div className="table mt-6 ">
-      <table className="table-auto border-y border-gray-400 w-[1500px] text-xs font-medium " >
-        <thead className='font-bold'>
-          <tr className='bg-teal-600 text-white'>
-            <td>#</td>
-            <td>Date</td>
-            <td>Username</td>
-            <td>Do you have a laptop?</td>
-            <td>Is your laptop ok?</td>
-            <td>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</td>
-            <td>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</td>
-            <td>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</td>
-            <td>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</td>
-            <td>Result</td>
-          
-            {/* UNIBEN - 130 */}
-            {/* CREATE CHAPTER PAGE ON FACEBOOK */}
-
+    <table className="table w-full border-none rounded table-auto">
+        <thead className="text-left">
+          <tr className="">
+            <th>#</th>
+            <th className="border-b">User Name</th>
+            <th className="">Email</th>
+            <th>Score</th>
           </tr>
         </thead>
-        <tbody className='text-sm'>
-          <tr >
-          <td>1</td>
-          <td className='w-1/12'>June 23</td>
-          <td className=''>tj</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>60% - Fairly secure</td>
-        </tr>
-          <tr >
-          <td>2</td>
-          <td className='w-1/12'>June 23</td>
-          <td className=''>john</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>60% - Fairly secure</td>
-        </tr>
-          <tr >
-          <td>3</td>
-          <td className='w-1/12'>June 23</td>
-          <td className=''>jim</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>60% - Fairly secure</td>
-        </tr>
-          <tr >
-          <td>4</td>
-          <td className='w-1/12'>June 23</td>
-          <td className=''>paul</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>60% - Fairly secure</td>
-        </tr>
-          <tr >
-          <td>5</td>
-          <td className='w-1/12'>June 23</td>
-          <td className=''>tj</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>60% - Fairly secure</td>
-        </tr>
-          <tr >
-          <td>6</td>
-          <td className='w-1/12'>June 23</td>
-          <td className=''>tj</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>No</td>
-          <td>No</td>
-          <td>Yes</td>
-          <td>60% - Fairly secure</td>
-        </tr>
-        
+        <tbody className="">
+          {data &&
+            data.map((user, index) => {
+              return (
+                user.type !== "admin" && (
+                  <tr className="border-b" key={user.id}>
+                    <td>{index + 1}</td>
+                    <td className="flex items-center justify-start border-none gap-x-4 ">
+                      <div className=" w-[36px] prof-icon">
+                        <img src="../user.png" className="w-full" alt="" />
+                      </div>
+                      {user.username}
+                    </td>
+                    <td>{user.email}</td>
+                    <td>
+                      {/* <select name="roles" id="roles">
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select> */}
+                      {(user.score/questions.length) * 100}%
+                    </td>
+                  </tr>
+                )
+              );
+            })}
         </tbody>
-        
-       
       </table>
 
     </div>

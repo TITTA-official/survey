@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { QuestionContext, SurveyShowContext } from "../context";
+import axios from "axios";
+import { QuestionContext, SurveyShowContext, ChoiceContext, ScoreContext, AuthContext } from "../context";
 
 function SurveyPage() {
   const [disabled, setDisabled] = useState(true);
@@ -7,7 +8,12 @@ function SurveyPage() {
   const [questions] = useContext(QuestionContext);
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [surveyEnd, setSurveyEnd] = useState(false);
+  const [choice, setChoice] = useContext(ChoiceContext)
+  const [score, setScore] = useContext(ScoreContext)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [user, setUser] = useContext(AuthContext);
   // let filteredQuestion;
   // filteredQuestion = questions.filter((question, index) => {
   //   return index === currentQuestionIndex;
@@ -21,17 +27,77 @@ function SurveyPage() {
     }
   }, [currentQuestionIndex, questions]);
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = (e) => {
+    console.log(choice)
     setCurrentQuestionIndex(currentQuestionIndex + 1);
+    handleScore(user.id, score);
+    setChoice('')
   };
   const handlePrevQuestion = () => {
     setCurrentQuestionIndex(currentQuestionIndex - 1);
   };
+  const handleChoiceChange = (e) => {
+    setChoice(e.target.value)
+  }
 
-  const finishHandler = () => {
+  const handleScore = async (id, score) => {
+    let token = localStorage.getItem("token");
+    let newScore = score + 1
+    try {
+      const res = await axios.patch(
+        `/users/update_score/${id}`,
+        {
+          score: newScore,
+        },
+        {
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (res.status === 200 && choice === 'yes') {
+        setScore(newScore)
+        setMessage(res.data.message);
+        setTimeout(() => {
+          setMessage("");
+        }, 2000);
+      }
+      console.log(res.data)
+      console.log(score)
+      console.log(choice)
+    } catch (error) {
+      //console.log(error);
+      setError(error.response.data.error);
+      setTimeout(() => {
+        setError("");
+      }, 2000);
+    }
+  };
+
+
+
+
+  // const handleScore = (e) => {
+  //   if(choice === 'yes') {
+  //     setScore(score + 1) 
+  //   }
+  //   console.log(score)
+  // }
+  const handleYesChoiceClick = (e) => {
+    setChoice('yes')
+    console.log(choice)
+  }
+  const handleNoChoiceClick = (e) => {
+    setChoice('no')
+    console.log(choice)
+  }
+
+  const finishHandler = (e) => {
     if (currentQuestionIndex === questions.length - 1) {
       setSurveyEnd(true);
     }
+    handleScore(user.id, score);
+    setChoice('')
   };
 
   if (surveyEnd) {
@@ -100,6 +166,7 @@ function SurveyPage() {
                 {`Q${currentQuestionIndex + 1}`}:
               </span>{" "}
               {`${currentQuestion}`}
+              
             </span>
 
             {/* return(<span className="text-sm font-medium leading-loose md:text-lg"><span className='font-bold'>{`Q${question.id}`}</span> {`${question.question}`}</span>) */}
@@ -110,12 +177,20 @@ function SurveyPage() {
                 htmlFor="yes"
                 className="label"
               >
-                <div className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp">
+                <div 
+                // onClick={handleYesChoiceClick} 
+                className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp">
                   <input
                     name="option"
                     id="yes"
                     type="radio"
-                    className="option"
+                    value="yes"
+                    onChange={(e) => {
+                      handleChoiceChange(e)
+                      
+                    }}
+                    className="option1"
+                    checked={choice === 'yes' ? true : false}
                   />{" "}
                   <span className="">Yes</span>
                 </div>
@@ -125,13 +200,21 @@ function SurveyPage() {
                 htmlFor="no"
                 className="label"
               >
-                <div className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp">
+                <div 
+                //  onClick={handleNoChoiceClick} 
+                 className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp">
                   {" "}
                   <input
                     name="option"
                     id="no"
                     type="radio"
-                    className="option"
+                    value="no"
+                    onChange={(e) => {
+                      handleChoiceChange(e)
+                      
+                    }}
+                    className="option2"
+                    checked={choice === 'no' ? true : false}
                   />{" "}
                   <span className=""> No</span>
                 </div>
@@ -153,7 +236,7 @@ function SurveyPage() {
             {currentQuestionIndex < questions.length - 1 && (
               <button
                 onClick={handleNextQuestion}
-                className={`bg-teal-500 text-[#fff] py-3 px-4 text-sm md:text-base rounded`}
+                className={`bg-teal-500 text-[#fff] py-3 px-4 text-sm md:text-base rounded ${disabled ? 'opacity-40 cursor-not-allowed ' : ''}`}
                 disabled={disabled}
               >
                 Next
