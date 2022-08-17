@@ -22,11 +22,11 @@ function AdminViewStatistics() {
                                         {/* {console.log(question.question)} */}
                                     </div>
                                     <div className="stats font-extrabold">
-                                        {score}/{questions.length}
+                                        {i+1}/{questions.length}
                                     </div>
                                 </div>
                                 <div className="w-full bg-gray-200 h-2.5 rounded-full">
-                                    <div className="bg-teal-600 h-2.5 w-[45%] rounded-full"></div>
+                                    <div className={`bg-teal-600 h-2.5 w-[${(((score*100)/questions.length))}] rounded-full`}></div>
                                 </div>
                             </div>
                         
