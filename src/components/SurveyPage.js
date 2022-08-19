@@ -174,7 +174,7 @@ function SurveyPage() {
             <div className="flex flex-col w-full gap-4 text-sm md:text-base">
               <label
                 onClick={() => setDisabled(false)}
-                htmlFor="yes"
+                htmlFor="always"
                 className="label"
               >
                 <div 
@@ -182,17 +182,65 @@ function SurveyPage() {
                 className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp">
                   <input
                     name="option"
-                    id="yes"
+                    id="always"
                     type="radio"
-                    value="yes"
+                    value="always"
                     onChange={(e) => {
                       handleChoiceChange(e)
                       
                     }}
                     className="option1"
-                    checked={choice === 'yes' ? true : false}
+                    checked={choice === 'always' ? true : false}
                   />{" "}
-                  <span className="">Yes</span>
+                  <span className="">Always</span>
+                </div>
+              </label>
+              <label
+                onClick={() => setDisabled(false)}
+                htmlFor="sometimes"
+                className="label"
+              >
+                <div 
+                //  onClick={handlesometimesChoiceClick} 
+                 className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp">
+                  {" "}
+                  <input
+                    name="option"
+                    id="sometimes"
+                    type="radio"
+                    value="sometimes"
+                    onChange={(e) => {
+                      handleChoiceChange(e)
+                      
+                    }}
+                    className="option2"
+                    checked={choice === 'sometimes' ? true : false}
+                  />{" "}
+                  <span className="">Sometimes</span>
+                </div>
+              </label>
+              <label
+                onClick={() => setDisabled(false)}
+                htmlFor="rarely"
+                className="label"
+              >
+                <div 
+                //  onClick={handlerarelyChoiceClick} 
+                 className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp">
+                  {" "}
+                  <input
+                    name="option"
+                    id="rarely"
+                    type="radio"
+                    value="rarely"
+                    onChange={(e) => {
+                      handleChoiceChange(e)
+                      
+                    }}
+                    className="option2"
+                    checked={choice === 'rarely' ? true : false}
+                  />{" "}
+                  <span className="">Rarely</span>
                 </div>
               </label>
               <label
@@ -206,17 +254,17 @@ function SurveyPage() {
                   {" "}
                   <input
                     name="option"
-                    id="no"
+                    id="never"
                     type="radio"
-                    value="no"
+                    value="never"
                     onChange={(e) => {
                       handleChoiceChange(e)
                       
                     }}
                     className="option2"
-                    checked={choice === 'no' ? true : false}
+                    checked={choice === 'never' ? true : false}
                   />{" "}
-                  <span className=""> No</span>
+                  <span className="">Never</span>
                 </div>
               </label>
             </div>

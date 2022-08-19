@@ -18,7 +18,8 @@ import {
   ChoiceProvider,
   ScoreProvider,
   QuestionProvider,
-  ShowViewSurveyQuestionsProvider
+  ShowViewSurveyQuestionsProvider,
+  VideoUrlProvider
 } from "./context";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -82,7 +83,9 @@ function App() {
                       <ScoreProvider>
                         <QuestionProvider>
                           <ShowViewSurveyQuestionsProvider>
-                            <DashboardPage user={user} />
+                            <VideoUrlProvider>
+                              <DashboardPage user={user} />
+                            </VideoUrlProvider>
                           </ShowViewSurveyQuestionsProvider>
                         </QuestionProvider>
                       </ScoreProvider>
@@ -108,7 +111,10 @@ function App() {
                             <ScoreProvider>
                               <QuestionProvider>
                                 <ShowViewSurveyQuestionsProvider>
-                                  <AdminDashboardPage user={user} />
+                                  <VideoUrlProvider>
+                                    <AdminDashboardPage user={user} />
+
+                                  </VideoUrlProvider>
                                 </ShowViewSurveyQuestionsProvider>
                               </QuestionProvider>
                             </ScoreProvider>

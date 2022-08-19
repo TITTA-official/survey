@@ -13,6 +13,7 @@ export const ShowBoardOfUsersContext = createContext();
 export const ChoiceContext = createContext();
 export const ScoreContext = createContext();
 export const ShowViewSurveyQuestionsContext = createContext();
+export const VideoUrlContext = createContext();
 
 //authencation and users details
 export const AuthContext = createContext();
@@ -34,7 +35,18 @@ export const SurveyShowProvider = (props) => {
       {props.children}
     </SurveyShowContext.Provider>
   );
-};
+  }
+
+  export const VideoUrlProvider = (props) => {
+    const [videoUrl, setVideoUrl] = useState('');
+    
+    return (
+      <VideoUrlContext.Provider value={[videoUrl, setVideoUrl]}>
+        {props.children}
+      </VideoUrlContext.Provider>
+    );
+  };
+
 export const ShowViewSurveyQuestionsProvider = (props) => {
   const [showViewSurveyQuestions, setShowViewSurveyQuestions] = useState(false);
 
