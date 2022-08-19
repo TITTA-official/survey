@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 function ViewLearningMaterials() {
   const [loading, setLoading] = useState(false);
   const [resources, setResources] = useState([]);
+  const [videoUrls, setVideoUrls] = useState([]);
   let token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -25,7 +26,31 @@ function ViewLearningMaterials() {
         setLoading(false);
         console.error(error);
       }
+    
     };
+
+    const getAllVideoUrls = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get("/admin/uploadVideo", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+        //console.log(res);
+        if (res) {
+          setVideoUrls(res.data.results);
+        }
+        // console.log(res.data.results)
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.error(error);
+      }
+    };
+
+    getAllVideoUrls();
+
     getAllResources();
   }, [token]);
   // const handleClickTopic=(e)=> {
@@ -54,16 +79,26 @@ function ViewLearningMaterials() {
               <div className="md:text-2xl ">Topic A</div>
             </div>
           </div> */}
-          {(resources.length && !loading) === 0 && (
+          {((resources.length || videoUrls.length) && !loading) === 0 && (
             <p className="mt-3 text-xs font-medium">No resources.</p>
           )}
         </div>
         <div className="grid grid-cols-1 gap-6 mt-10 resources md:grid-cols-3 place-items-center">
 
           {
-            
-
-          
+            videoUrls.map((videoUrl, i) => {
+              return (
+                <div
+                  key={i}
+                  className="resource cursor-pointer bg-glass border-2 border-gray-100 transition-all hover:scale-105 rounded shadow-lg hover:shadow-2xl flex flex-col items-center justify-center gap-4 w-[70%] md:w-[100%] relative px-4 py-4 h-[19ch] overflow-hidden"
+                >
+                  <iframe className="w-full"  height="315" src={videoUrl.videoUrl} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                  <div className="font-semibold nameofcontent">{'Video' + (i+1)}</div>
+                </div>
+              );
+            })
+}
+ {         
           resources.map((r, id) => {
             return (
               <div
@@ -86,7 +121,9 @@ function ViewLearningMaterials() {
                 </a>
               </div>
             );
-          })}
+          })
+
+        }
           {/* <div className="resource cursor-pointer border-2 border-gray-100 transition-all hover:scale-105 rounded shadow-lg hover:shadow-2xl flex items-center justify-center gap-4 w-[70%] md:w-[100%] relative px-4 py-4 h-[19ch] overflow-hidden">
             <div className="icon w-[64px]">
               <img src="../pdf.png" alt="" />

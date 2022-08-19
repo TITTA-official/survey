@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { ShowUploadLearningMaterialsContext,VideoUrlContext } from "../context.js";
 
@@ -14,7 +14,9 @@ function UploadLearningMaterials() {
   const[inputUrl, setInputUrl] = useState('')
   // const [, setShowFUploadLearningMaterials] =
   // useContext(ShowUploadLearningMaterialsContext);
-  
+//   useEffect(() => {
+//     setVideoUrl(inputUrl) // This is be executed when `loading` state changes
+// }, [inputUrl])
 
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     accept: "text/html",
@@ -85,23 +87,24 @@ function UploadLearningMaterials() {
   const SubmitVideoUrl = async (e) => {
     e.preventDefault();
 
-    if (videoUrl === '') {
+    if (videoUrl !== '') {
       setLoading(true);
       let token = localStorage.getItem("token");
         try {
-          const res = await axios.post(
-            "/admin/upload/videoUrl",
-            { videoUrl: videoUrl },
+          const res2 = await axios.post(
+            "/admin/uploadVideo",
+            { videoUrl },
             {
               headers: {
                 Authorization: "Bearer " + token,
               },
             }
           );
-          setVideoUrl(inputUrl)
-          console.log(res);
+          // setVideoUrl(videoUrl)
+          console.log(res2);
+          console.log(videoUrl)
           setLoading(false);
-          setVideoMessage(res.data.message);
+          setVideoMessage(res2.data.message);
           // setShowFUploadLearningMaterials(false);
         } catch (error) {
           setLoading(false);
@@ -110,10 +113,8 @@ function UploadLearningMaterials() {
         }
         console.log(videoUrl)
     }
-    
-
-    
   }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 place-items-center mx-auto">
     <form
@@ -152,14 +153,19 @@ function UploadLearningMaterials() {
         </button>
       </div>
     </form>
-    <form  onSubmit={SubmitVideoUrl} className="bg-glass mt-5 w-[80%] md:max-w-lg py-5 px-6 flex flex-col gap-5">
+    <form onSubmit={SubmitVideoUrl}  className="bg-glass mt-5 w-[80%] md:max-w-lg py-5 px-6 flex flex-col gap-5">
     <div>For video upload place the url in the field below:</div>
     {videoMessage && <p className="text-xs font-medium capitalize">{videoMessage}</p>}
         {videoError && (
           <p className="text-xs font-medium text-red-500 capitalize">{videoError}</p>
         )}
-    <input type="text" className="py-2 px-3 bg-glass " value={inputUrl} onChange={(e) => setInputUrl(e.target.value)} />
-    <button className='border-2 rounded py-2 px-4 border-teal-600' type='submit'>{loading ? "Uploading..." : "Upload"}</button>
+    <input type="text" className="py-2 px-3 bg-glass " value={videoUrl} onChange={(e) => {
+      setVideoUrl(e.target.value)
+      // console.log(e.target.value)
+    }
+
+    } />
+    <button  className='border-2 rounded py-2 px-4 border-teal-600' type='Submit'>{loading ? "Uploading..." : "Upload"}</button>
   </form>
   </div>
   );
