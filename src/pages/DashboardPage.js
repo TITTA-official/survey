@@ -170,7 +170,7 @@ function DashboardPage({ user }) {
         <div
           className={` ${
             showSurvey
-              ? "fixed top-0 w-screen h-screen bg-white "
+              ? "fixed top-0 w-screen min-h-screen bg-white "
               : "hidden opacity-0"
           }`}
         >
