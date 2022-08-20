@@ -16,26 +16,34 @@ function ViewSurveyQuestions() {
   // const loadQuestions = () => {
   //   }
 
-  const handleDelete = async (id) => {
-    let token = localStorage.getItem("token");
-    try {
-      // console.log(questionID)
-      const res = await axios.delete(`/admin/survey/delete_question/${id}`, {
-        headers: {
-          authorization: "Bearer " + token,
-        },
-      });
-      // console.log(res.data);
-      setMessage(res.data.message);
-      setQuestion("");
-      setDeleteClicked(true);
-      setLoading(false);
-      // console.log(res.data.results)
-    } catch (error) {
-      setLoading(false);
-      setError(error.response.data.error);
-      console.error(error);
-    }
+  const handleDelete = async () => {
+    // e.preventDefault();
+    // window.location.reload();
+    // let token = localStorage.getItem("token");
+    // try {
+    //   // console.log(questionID)
+    //   const res = await axios.delete(
+    //     `/admin/survey/delete_question/${questionID}`,
+    //     {
+    //       questionID,
+    //     },
+    //     {
+    //       headers: {
+    //         authorization: "Bearer " + token,
+    //       },
+    //     }
+    //   );
+    //   // console.log(res.data);
+    //   setMessage(res.data.message);
+    //   setQuestion('')
+    //   setDeleteClicked(true)
+    //   setLoading(false);
+    //   // console.log(res.data.results)
+    // } catch (error) {
+    //   setLoading(false);
+    //   setError(error.response.data.error);
+    //   console.error(error);
+    // }
   };
 
   const handleSubmit = async (e) => {

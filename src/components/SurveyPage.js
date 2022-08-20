@@ -160,7 +160,7 @@ function SurveyPage() {
             <div className="flex flex-col w-full gap-4 text-sm md:text-base">
               <label
                 onClick={() => setDisabled(false)}
-                htmlFor="yes"
+                htmlFor="always"
                 className="label"
               >
                 <div
@@ -183,7 +183,7 @@ function SurveyPage() {
               </label>
               <label
                 onClick={() => setDisabled(false)}
-                htmlFor="no"
+                htmlFor="rarely"
                 className="label"
               >
                 <div
@@ -202,7 +202,7 @@ function SurveyPage() {
                     className="option2"
                     checked={choice === "no" ? true : false}
                   />{" "}
-                  <span className=""> No</span>
+                  <span className="">Never</span>
                 </div>
               </label>
             </div>
