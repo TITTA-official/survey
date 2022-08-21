@@ -9,7 +9,7 @@ import { AuthContextProvider } from "./context";
 
 //axios.defaults.withCredentials = true;
 axios.defaults.headers = { "Access-Control-Allow-Credentials": "*" };
-axios.defaults.baseURL = "https://survey-serve-titta.herokuapp.com/api/v1/";
+axios.defaults.baseURL = "https://server-survey-titta.herokuapp.com/api/v1/";
 // axios.defaults.baseURL = "http://localhost:8080/api/v1/";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
