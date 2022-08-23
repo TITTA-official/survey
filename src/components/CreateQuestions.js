@@ -4,6 +4,10 @@ import { AuthContext } from "../context";
 
 function CreateQuestions() {
   const [question, setQuestion] = useState("");
+  const [option1, setOption1] = useState("");
+  const [option2, setOption2] = useState("");
+  const [option3, setOption3] = useState("");
+  const [option4, setOption4] = useState("");
   const [loading, setLoading] = useState(false);
   const [user] = useContext(AuthContext);
   const [message, setMessage] = useState("");
@@ -14,13 +18,24 @@ function CreateQuestions() {
     e.preventDefault();
     let token = localStorage.getItem("token");
     // const myJSON = JSON.stringify(data)
-    try {
+    // const data = {
+    //       question:question,
+    //       option1: "yes",
+    //       option2: "donot",
+    //       option3: "forearms",
+    //       option4: "fireman",
+    //       admnID: user.id,
+    // }
+      try {
       const res = await axios.post(
         "/admin/survey/post_question",
         {
           question,
-      // options:["yes", "bye", "ok"],
-          admnID: user.id
+          option1,
+          option2,
+          option3,
+          option4,
+          adminID: user.id,
         },
         {
           headers: {
@@ -40,6 +55,10 @@ function CreateQuestions() {
       console.log(res.data.results)
       setMessage(res.data.message);
       setQuestion("");
+      setOption1("");
+      setOption2("");
+      setOption3("");
+      setOption4("");
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -76,37 +95,37 @@ function CreateQuestions() {
           type="text"
           className="w-[60%] mt-8 text-sm px-2 py-3 border-2 border-gray-500 rounded"
           placeholder="Option 1"
-          // onChange={(e) => {
-          //   setOption1(e.target.value);
-          // }}
-          // value={question}
+          onChange={(e) => {
+            setOption1(e.target.value);
+          }}
+          value={option1}
         />
         <input
           type="text"
           className="w-[60%] mt-5 text-sm px-2 py-3 border-2 border-gray-500 rounded"
           placeholder="Option 2"
-          // onChange={(e) => {
-          //   setOption2(e.target.value);
-          // }}
-          // value={question}
+          onChange={(e) => {
+            setOption2(e.target.value);
+          }}
+          value={option2}
         />
         <input
           type="text"
           className="w-[60%] mt-5 text-sm px-2 py-3 border-2 border-gray-500 rounded"
           placeholder="Option 3"
-          // onChange={(e) => {
-          //   setOption3(e.target.value);
-          // }}
-          // value={question}
+          onChange={(e) => {
+            setOption3(e.target.value);
+          }}
+          value={option3}
         />
         <input
           type="text"
           className="w-[60%] mt-5 text-sm px-2 py-3 border-2 border-gray-500 rounded"
           placeholder="Option 4"
-          // onChange={(e) => {
-          //   setOption4(e.target.value);
-          // }}
-          // value={question}
+          onChange={(e) => {
+            setOption4(e.target.value);
+          }}
+          value={option4}
         />
       </div>
 
