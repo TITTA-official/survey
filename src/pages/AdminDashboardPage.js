@@ -25,7 +25,7 @@ import {
   ShowUploadLearningMaterialsContext,
   ShowUploadLearningMaterialsProvider,
   ViewLearningMaterialsContext,
-  ShowViewSurveyQuestionsContext
+  ShowViewSurveyQuestionsContext,
 } from "../context";
 import ViewSurveyQuestions from "../components/ViewSurveyQuestions";
 
@@ -193,7 +193,6 @@ function AdminDashboardPage({ user }) {
         </ShowUploadLearningMaterialsProvider>
       )}
 
-
       {showAdminUsersList && (
         <div
           className={` fixed z-50 top-0 w-screen overflow-auto h-screen bg-gray-200 flex justify-center items-center`}
@@ -210,7 +209,6 @@ function AdminDashboardPage({ user }) {
         </div>
       )}
 
-
       {showViewSurveyQuestions && (
         <div
           className={` fixed z-50 top-0 w-screen overflow-auto h-screen bg-gray-200 flex justify-center items-start`}
@@ -223,10 +221,9 @@ function AdminDashboardPage({ user }) {
           >
             <img className="w-full h-full" src="../close.png" alt="" />
           </div>
-          <ViewSurveyQuestions/>
+          <ViewSurveyQuestions />
         </div>
       )}
-
 
       {showCreateQuestions && (
         <ShowCreateQuestionsProvider>

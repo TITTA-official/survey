@@ -4,10 +4,10 @@ import { AuthContext } from "../context";
 
 function CreateQuestions() {
   const [question, setQuestion] = useState("");
-  const [linkageOption1, setLinkageOption1] = useState(null)
-  const [linkageOption2, setLinkageOption2] = useState(null)
-  const [linkageOption3, setLinkageOption3] = useState(null)
-  const [linkageOption4, setLinkageOption4] = useState(null)
+  const [linkageOption1, setLinkageOption1] = useState("");
+  const [linkageOption2, setLinkageOption2] = useState("");
+  const [linkageOption3, setLinkageOption3] = useState("");
+  const [linkageOption4, setLinkageOption4] = useState("");
   const [option1, setOption1] = useState("");
   const [option2, setOption2] = useState("");
   const [option3, setOption3] = useState("");
@@ -17,21 +17,19 @@ function CreateQuestions() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmitLinkage = async (e) => {
+  const handleSubmitLinkage = async (id) => {
     setLoading(true);
-    e.preventDefault();
-    let token = localStorage.getItem("token")
+    let token = localStorage.getItem("token");
 
     try {
       const res = await axios.post(
         "/admin/survey/post_linkage",
         {
-          question,
-          linkageOption1,
-          linkageOption2,
-          linkageOption3,
-          linkageOption4,
-          adminID: user.id,
+          questionID: id,
+          option1: linkageOption1,
+          option2: linkageOption2,
+          option3: linkageOption3,
+          option4: linkageOption4,
         },
         {
           headers: {
@@ -39,43 +37,25 @@ function CreateQuestions() {
           },
         }
       );
-      // const res = await axios.get(
-      //   "/admin/survey",
-      //   {
-      //       headers: {
-      //            Authorization: "Bearer " + token,
-      //          },
-      //   },
-      // )
       console.log(res);
-      console.log(res.data.results)
+      console.log(res.data.results);
       setMessage(res.data.message);
-      setLinkageOption1(null)
-      setLinkageOption2(null)
-      setLinkageOption3(null)
-      setLinkageOption4(null)
+      setLinkageOption1("");
+      setLinkageOption2("");
+      setLinkageOption3("");
+      setLinkageOption4("");
       setLoading(false);
     } catch (error) {
       setLoading(false);
       setError(error.response.data.error);
       console.error(error);
     }
-  }
+  };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
     setLoading(true);
-    e.preventDefault();
     let token = localStorage.getItem("token");
-    // const myJSON = JSON.stringify(data)
-    // const data = {
-    //       question:question,
-    //       option1: "yes",
-    //       option2: "donot",
-    //       option3: "forearms",
-    //       option4: "fireman",
-    //       admnID: user.id,
-    // }
-      try {
+    try {
       const res = await axios.post(
         "/admin/survey/post_question",
         {
@@ -92,17 +72,10 @@ function CreateQuestions() {
           },
         }
       );
-      // const res = await axios.get(
-      //   "/admin/survey",
-      //   {
-      //       headers: {
-      //            Authorization: "Bearer " + token,
-      //          },
-      //   },
-      // )
-      console.log(res);
-      console.log(res.data.results)
       setMessage(res.data.message);
+      if (res.data.questionID) {
+        handleSubmitLinkage(res.data.questionID);
+      }
       setQuestion("");
       setOption1("");
       setOption2("");
@@ -118,10 +91,8 @@ function CreateQuestions() {
 
   const handleAllSubmit = (e) => {
     e.preventDefault();
-    handleSubmit(e);
-    handleSubmitLinkage(e)
-  }
-
+    handleSubmit();
+  };
 
   return (
     <form
@@ -140,11 +111,11 @@ function CreateQuestions() {
           type="text"
           className="w-full px-3 py-4 border-2 border-gray-500 rounded"
           placeholder="Enter Survey Question Here"
-           onChange={(e) => {
+          onChange={(e) => {
             setQuestion(e.target.value);
-            console.log(question)
-           }}
-           value={question}
+            console.log(question);
+          }}
+          value={question}
         />
         <div className="flex gap-3">
           <input
@@ -165,7 +136,6 @@ function CreateQuestions() {
             }}
             value={linkageOption1}
           />
-
         </div>
         <div className="flex gap-3">
           <input
@@ -186,7 +156,6 @@ function CreateQuestions() {
             }}
             value={linkageOption2}
           />
-          
         </div>
 
         <div className="flex gap-3">
@@ -208,7 +177,6 @@ function CreateQuestions() {
             }}
             value={linkageOption3}
           />
-          
         </div>
         <div className="flex gap-3">
           <input
@@ -229,7 +197,6 @@ function CreateQuestions() {
             }}
             value={linkageOption4}
           />
-          
         </div>
       </div>
 
