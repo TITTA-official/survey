@@ -11,6 +11,7 @@ import DashboardNavbar from "../components/DashboardNavbar";
 import AdminViewStatistics from "../components/AdminViewStatistics";
 import CreateQuestions from "../components/CreateQuestions";
 import UploadLearningMaterials from "../components/UploadLearningMaterials";
+import ViewSurveyQuestions from "../components/ViewSurveyQuestions";
 import {
   AuthContext,
   ResultShowContext,
@@ -24,10 +25,9 @@ import {
   ShowCreateQuestionsProvider,
   ShowUploadLearningMaterialsContext,
   ShowUploadLearningMaterialsProvider,
-  ViewLearningMaterialsContext,
   ShowViewSurveyQuestionsContext,
+  ViewLearningMaterialsContext,
 } from "../context";
-import ViewSurveyQuestions from "../components/ViewSurveyQuestions";
 
 function AdminDashboardPage({ user }) {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -145,9 +145,6 @@ function AdminDashboardPage({ user }) {
           className="flex items-center justify-center w-3/6 px-6 text-center bg-teal-600 rounded-full cursor-pointer action py-14"
         >
           View Statistics
-        </div>
-        <div className="flex items-center justify-center w-3/6 px-6 text-center bg-teal-600 rounded-full cursor-pointer action py-14">
-          Generate Report
         </div>
         <div
           onClick={() =>
