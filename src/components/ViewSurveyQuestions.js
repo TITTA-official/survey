@@ -25,13 +25,12 @@ function ViewSurveyQuestions() {
     // e.preventDefault();
     // window.location.reload();
     console.log(user)
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem("token")
     try {
       // console.log(questionID)
       const res = await axios.delete(
         `/admin/survey/delete_question/${questionID}`,
         {
-          adminID: user.id,
           questionID
         },
         {
