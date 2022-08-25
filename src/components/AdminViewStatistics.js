@@ -67,7 +67,7 @@ function AdminViewStatistics() {
                           style={{
                             width: `${(d?.response / totalResponse) * 100}%`,
                           }}
-                          className="bg-teal-600 h-2.5 rounded-full"
+                          className="bg-teal-600 h-2.5 w-0 rounded-full"
                         ></div>
                       </div>
                     </div>
