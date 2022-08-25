@@ -46,9 +46,10 @@ function Question({
           const res = await axios.patch(
             `/user/response/update_responseOption/${question.questionID}`,
             {
-              ["response_" + prevChoiceOption]: --question[
-                "response_" + prevChoiceOption
-              ],
+              ["response_" + prevChoiceOption]:
+                question["response_" + prevChoiceOption] > 0
+                  ? --question["response_" + prevChoiceOption]
+                  : 0,
             },
             {
               headers: {
