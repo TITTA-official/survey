@@ -167,7 +167,7 @@ function SurveyPage() {
 
   const finishHandler = (e) => {
     e.preventDefault();
-    if (currentQuestionIndex === questions.length - 1) {
+    if (responses.length === questions.length) {
       setSurveyEnd(true);
     }
     handleScore(user.id, score);
