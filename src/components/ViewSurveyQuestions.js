@@ -72,7 +72,7 @@ function ViewSurveyQuestions() {
         }
       );
       setMessage(res.data.message);
-      setQuestion("");
+      // setQuestion("");
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -166,12 +166,14 @@ function ViewSurveyQuestions() {
       <div className=" overflow-x-scroll md:overflow-x-hidden w-[90%] mx-auto px-6 py-6 mb-4 bg-white rounded">
         <table>
           <thead>
-            <th>IDs</th>
-            <th>Questions</th>
-            <th>Option 1</th>
-            <th>Option 2</th>
-            <th>Option 3</th>
-            <th>Option 4</th>
+            <tr>
+              <th>IDs</th>
+              <th>Questions</th>
+              <th>Option 1</th>
+              <th>Option 2</th>
+              <th>Option 3</th>
+              <th>Option 4</th>
+            </tr>
           </thead>
 
           <tbody>
@@ -194,7 +196,6 @@ function ViewSurveyQuestions() {
                         setLinkageOption2(linkages[index]?.option2);
                         setLinkageOption3(linkages[index]?.option3);
                         setLinkageOption4(linkages[index]?.option4);
-                        console.log(linkages[index]?.option1);
                       }}
                       className="icon w-[16px] cursor-pointer"
                     >
@@ -239,7 +240,9 @@ function ViewSurveyQuestions() {
           <div className="mb-4 text-base font-bold md:text-lg">
             <p>Question</p>
             {message && (
-              <p className="text-xs font-medium capitalize">{message}</p>
+              <p className="text-xs font-medium text-green-500 capitalize">
+                {message}
+              </p>
             )}
             {(error || linkageError) && (
               <p className="text-xs font-medium text-red-500 capitalize">
