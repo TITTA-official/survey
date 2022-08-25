@@ -1,9 +1,8 @@
 import React from "react";
-import { QuestionContext, ScoreContext } from "../context";
+import { QuestionContext } from "../context";
 
 function AdminViewStatistics() {
   const [questions] = React.useContext(QuestionContext);
-  const [score, setScore] = React.useContext(ScoreContext);
 
   return (
     <div className="flex justify-center">
