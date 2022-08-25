@@ -21,7 +21,6 @@ function Question({
   const handleChange = (e) => {
     if (prevChoiceOption) {
       setChanged(true);
-      setPrevChoiceOption("");
     } else {
       getOption(e.target.value);
     }
@@ -40,6 +39,7 @@ function Question({
   useEffect(() => {
     if (changed && prevChoiceOption) {
       setChanged(false);
+      setPrevChoiceOption("");
       const updatePrevChoiceResponse = async () => {
         let token = localStorage.getItem("token");
         try {
