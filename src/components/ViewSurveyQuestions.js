@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import {  QuestionContext } from "../context";
+import { QuestionContext } from "../context";
 
 function ViewSurveyQuestions() {
   const [questions] = useContext(QuestionContext);
@@ -33,7 +33,7 @@ function ViewSurveyQuestions() {
         },
       });
       setMessage(res.data.message);
-      setQuestion("");
+      // setQuestion("");
       setDeleteClicked(true);
       setLoading(false);
       setDeleted(true);

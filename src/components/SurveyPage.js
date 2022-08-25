@@ -167,7 +167,7 @@ function SurveyPage() {
 
   const finishHandler = (e) => {
     e.preventDefault();
-    if (responses.length === questions.length) {
+    if (responses.length === questions.length - 1) {
       setSurveyEnd(true);
     }
     handleScore(user.id, score);
@@ -236,7 +236,7 @@ function SurveyPage() {
             alt=""
           />
         </div>
-        <div>
+        <div className="hidden">
           {error && <p className="text-sm text-red-500">{error}</p>}
           {message && <p className="text-sm text-green-500">{message}</p>}
         </div>
@@ -264,7 +264,7 @@ function SurveyPage() {
                 Next={handleNextQuestion}
                 Prev={handlePrevQuestion}
                 allAnswered={
-                  responses.length === questions.length ? true : false
+                  responses.length === questions.length - 1 ? true : false
                 }
               />
             );

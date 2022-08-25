@@ -19,7 +19,7 @@ function AdminViewLearningMaterials() {
             Authorization: "Bearer " + token,
           },
         });
-        console.log(res);
+        // console.log(res);
         if (res) {
           setResources(res.data.results);
         }
@@ -83,20 +83,27 @@ function AdminViewLearningMaterials() {
           )}
         </div>
         <div className="grid grid-cols-1 gap-6 mt-10 resources md:grid-cols-3 place-items-center">
-
-        {
-            videoUrls.map((videoUrl, i) => {
-              return (
-                <div
-                  key={i}
-                  className="resource cursor-pointer bg-glass border-2 border-gray-100 transition-all hover:scale-105 rounded shadow-lg hover:shadow-2xl flex flex-col items-center justify-center gap-4 w-[70%] md:w-[100%] relative px-4 py-4 h-[19ch] overflow-hidden"
-                >
-                  <iframe className="w-full"  height="315" src={videoUrl.videoUrl} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                  <div className="font-semibold nameofcontent">{'Video' + (i+1)}</div>
+          {videoUrls.map((videoUrl, i) => {
+            return (
+              <div
+                key={i}
+                className="resource cursor-pointer bg-glass border-2 border-gray-100 transition-all hover:scale-105 rounded shadow-lg hover:shadow-2xl flex flex-col items-center justify-center gap-4 w-[70%] md:w-[100%] relative px-4 py-4 h-[19ch] overflow-hidden"
+              >
+                <iframe
+                  className="w-full"
+                  height="315"
+                  src={videoUrl.videoUrl}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+                <div className="font-semibold nameofcontent">
+                  {"Video" + (i + 1)}
                 </div>
-              );
-            })
-}
+              </div>
+            );
+          })}
 
           {resources.map((r, id) => {
             return (

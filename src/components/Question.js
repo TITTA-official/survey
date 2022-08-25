@@ -77,7 +77,7 @@ function Question({
 
   return (
     <form className={className} onSubmit={Finish}>
-      <div>
+      <div className="hidden">
         {error && <p className="text-sm text-red-500">{error}</p>}
         {message && <p className="text-sm text-green-500">{message}</p>}
       </div>
@@ -89,10 +89,10 @@ function Question({
         <div className="flex flex-col w-full gap-4 text-sm md:text-base">
           {options.map((opt, id) => {
             return (
-              <label key={id} htmlFor={opt + index} className="label">
+              <label key={id} htmlFor={opt + index}>
                 <div
                   // onClick={handleYesChoiceClick}
-                  className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp"
+                  className="flex items-center w-full gap-4 px-3 py-4 font-semibold border capitalize border-gray-400 rounded cursor-pointer radio-grp"
                 >
                   <input
                     name="option"
@@ -122,16 +122,18 @@ function Question({
             <span></span> Previous
           </button>
         )}
-        <button
-          type="button"
-          onClick={Next}
-          className={`bg-teal-500 text-[#fff] py-3 px-4 text-sm md:text-base rounded ${
-            disabled ? "opacity-40 cursor-not-allowed " : ""
-          }`}
-          disabled={disabled}
-        >
-          Next
-        </button>
+        {!allAnswered && (
+          <button
+            type="button"
+            onClick={Next}
+            className={`bg-teal-500 text-[#fff] py-3 px-4 text-sm md:text-base rounded ${
+              disabled ? "opacity-40 cursor-not-allowed " : ""
+            }`}
+            disabled={disabled}
+          >
+            Next
+          </button>
+        )}
         {allAnswered && (
           <button
             type="submit"
