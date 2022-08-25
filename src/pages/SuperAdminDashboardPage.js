@@ -1,6 +1,5 @@
-import axios from "axios";
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import AdminUsersList from "../components/AdminUsersList";
 import AdminViewLearningMaterials from "../components/AdminViewLearningMaterials";
 import AdminViewResults from "../components/AdminViewResults";
@@ -15,10 +14,7 @@ import {
   ResultShowContext,
   ResultShowProvider,
   ShowAdminUsersListContext,
-  ShowAdminUsersListProvider,
   ShowAdminViewStatisticsContext,
-  ShowAdminViewStatisticsProvider,
-  ShowBoardOfUsers,
   ShowBoardOfUsersContext,
   ShowCreateQuestionsContext,
   ShowCreateQuestionsProvider,
@@ -59,6 +55,13 @@ function SuperAdminDashboardPage({ user }) {
 
   const [showUploadLearningMaterials, setShowUploadLearningMaterials] =
     useContext(ShowUploadLearningMaterialsContext);
+  if (user.type === "user") {
+    return <Navigate to="/dashboard" replace={true} />;
+  }
+
+  if (user.type === "admin") {
+    return <Navigate to="/dashboard-admin" replace={true} />;
+  }
   return (
     <div className="relative">
       <div className="sticky top-0 flex items-center justify-between px-4 py-3 navbar bg-glass md:px-6 md:py-4">

@@ -35,9 +35,13 @@ function LoginPage() {
       }
     } catch (error) {
       setLoading(false);
-      //console.log(error);
+      console.log(error);
       if (error) {
-        setMsg(error.response.data.error);
+        setMsg(
+          (error.response?.data?.error?.fatal && "Fatal error") ||
+            error?.response?.data?.error ||
+            "Network error"
+        );
       }
     }
   };
@@ -62,7 +66,11 @@ function LoginPage() {
                 </Link>
               </span>
             </div>
-            {msg && <p className="text-sm font-semibold text-red-600">{msg}</p>}
+            {msg && (
+              <p className="text-sm font-semibold text-red-600">
+                {msg.toString()}
+              </p>
+            )}
             <div className="flex items-center justify-between w-full input-group md:px-9">
               <label htmlFor="username" className="text-sm md:text-base">
                 Email

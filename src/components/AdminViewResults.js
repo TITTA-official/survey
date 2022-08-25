@@ -1,21 +1,12 @@
-import React, { useContext, useState } from "react";
-import {
-  QuestionContext,
-  ResultShowContext,
-  ResultShowProvider,
-  ScoreContext,
-  ShowAdminUsersListContext,
-} from "../context";
+import React, { useContext } from "react";
+import { QuestionContext, ShowAdminUsersListContext } from "../context";
 
 function ViewResults() {
-  const [showResult, setShowResult] = useContext(ResultShowContext);
   const [data] = useContext(ShowAdminUsersListContext);
   const [questions] = useContext(QuestionContext);
-  // const [score, setScore] = useContext(ScoreContext);
-  // const [newshowResult, setShowResult] = useState(showResult)
 
   return (
-    <div className={`text-[#000]   px-4`}>
+    <div className=" h-screen overflow-auto text-[#000] px-4">
       <div className="mt-32 md:max-w-screen-lg">
         <div className="font-medium heding">
           Results for <span className="font-bold">all users</span>

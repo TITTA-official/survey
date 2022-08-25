@@ -1,8 +1,8 @@
 import { Navigate } from "react-router-dom";
 
 function PublicRoute({ children, user }) {
-  let token = localStorage.getItem("token");
-  if (user && token) {
+  // let token = localStorage.getItem("token");
+  if (user) {
     if (user.type === "superadmin") {
       return <Navigate to="/dashboard-superadmin" replace={true} />;
     } else if (user.type === "admin") {

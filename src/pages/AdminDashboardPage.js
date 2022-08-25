@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import AdminUsersList from "../components/AdminUsersList";
 import AdminViewLearningMaterials from "../components/AdminViewLearningMaterials";
 import AdminViewResults from "../components/AdminViewResults";
@@ -57,6 +57,10 @@ function AdminDashboardPage({ user }) {
 
   const [showUploadLearningMaterials, setShowUploadLearningMaterials] =
     useContext(ShowUploadLearningMaterialsContext);
+
+  if (user.type === "user") {
+    return <Navigate to="/dashboard" replace={true} />;
+  }
 
   return (
     <div className="relative">

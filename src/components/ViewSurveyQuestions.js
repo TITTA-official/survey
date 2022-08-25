@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { AuthContext, QuestionContext } from "../context";
+import {  QuestionContext } from "../context";
 
 function ViewSurveyQuestions() {
   const [questions] = useContext(QuestionContext);
@@ -12,7 +12,6 @@ function ViewSurveyQuestions() {
   const [option3, setOption3] = useState("");
   const [option4, setOption4] = useState("");
   const [loading, setLoading] = useState(false);
-  const [user] = useContext(AuthContext);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [linkageError, setLinkageError] = useState("");

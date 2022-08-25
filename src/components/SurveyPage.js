@@ -7,9 +7,9 @@ import {
   ScoreContext,
   SurveyShowContext,
 } from "../context";
+import Question from "./Question";
 
 function SurveyPage() {
-  const [disabled, setDisabled] = useState(true);
   const [showSurvey, setShowSurvey] = useContext(SurveyShowContext);
   const [questions, linkages] = useContext(QuestionContext);
   const [currentQuestion, setCurrentQuestion] = useState("");
@@ -33,18 +33,25 @@ function SurveyPage() {
   }, [currentQuestionIndex, questions]);
 
   const handleNextQuestion = () => {
-    setResponses((prev) => [
-      ...prev,
-      {
-        questionID: currentQuestion.questionID,
-        question: currentQuestion,
-        response: choice,
-      },
-    ]);
     setPreviousQuestionIndex(currentQuestionIndex);
+    // console.log(choice);
     let question = questions[currentQuestionIndex];
     Object.entries(question).forEach((key) => {
       if (key[1]?.toString().toLowerCase() === choice.toLowerCase()) {
+        setResponses((prev) => {
+          let state = prev.filter(
+            (res) => res.question !== currentQuestion.questionID
+          );
+          return [
+            ...state,
+            {
+              questionID: questions[currentQuestionIndex].questionID,
+              question: currentQuestion,
+              response: choice,
+            },
+          ];
+        });
+        UpdateObj(key[0]?.toLocaleLowerCase());
         setScore((prev) => {
           if (key[0]?.toLocaleLowerCase() === "option1") {
             return prev + 4;
@@ -75,13 +82,21 @@ function SurveyPage() {
         } else {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
         }
+      } else {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
       }
     });
     setChoice("");
-    setDisabled(true);
+  };
+  const UpdateObj = (option) => {
+    updateQuestionOptionResponse({
+      ["response_" + option]: ++questions[currentQuestionIndex][
+        "response_" + option
+      ],
+    });
   };
   const handlePrevQuestion = () => {
-    console.log(prevQuestionIndex);
+    // console.log(prevQuestionIndex);
     if (prevQuestionIndex > 0) {
       setCurrentQuestionIndex(prevQuestionIndex);
       setTimeout(() => {
@@ -90,9 +105,6 @@ function SurveyPage() {
       return false;
     }
     return setCurrentQuestionIndex(currentQuestionIndex - 1);
-  };
-  const handleChoiceChange = (e) => {
-    setChoice(e.target.value);
   };
 
   const handleScore = async (id, score) => {
@@ -124,14 +136,13 @@ function SurveyPage() {
     }
   };
 
-  const handleResponse = async () => {
+  const updateQuestionOptionResponse = async (data) => {
     let token = localStorage.getItem("token");
     try {
-      const res = await axios.post(
-        `/users/response/post_response`,
+      const res = await axios.patch(
+        `/user/response/update_responseOption/${questions[currentQuestionIndex].questionID}`,
         {
-          data: [...new Set(responses)],
-          userID: user.id,
+          ...data,
         },
         {
           headers: {
@@ -144,9 +155,9 @@ function SurveyPage() {
       setTimeout(() => {
         setMessage("");
       }, 2000);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
-      //console.log(error);
+      // console.log(error);
       setError(error.response.data.error);
       setTimeout(() => {
         setError("");
@@ -154,16 +165,14 @@ function SurveyPage() {
     }
   };
 
-  const finishHandler = () => {
+  const finishHandler = (e) => {
+    e.preventDefault();
     if (currentQuestionIndex === questions.length - 1) {
       setSurveyEnd(true);
     }
     handleScore(user.id, score);
-    handleResponse();
     setChoice("");
   };
-
-  console.log(responses);
 
   if (surveyEnd) {
     return (
@@ -227,149 +236,39 @@ function SurveyPage() {
             alt=""
           />
         </div>
-        <div className="flex flex-col items-center justify-center mt-16 content gap-y-24">
-          <div className="flex flex-col max-w-screen-md gap-8 question">
-            <span className="text-lg font-bold leading-loose md:text-2xl md:mb-6">
-              <span className="font-bold">
-                {`Q${currentQuestionIndex + 1}`}:
-              </span>{" "}
-              {`${currentQuestion}`}
-            </span>
-            <div className="flex flex-col w-full gap-4 text-sm md:text-base">
-              <label
-                onClick={() => setDisabled(false)}
-                htmlFor={questions[currentQuestionIndex]?.option1}
-                className="label"
-              >
-                <div
-                  // onClick={handleYesChoiceClick}
-                  className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp"
-                >
-                  <input
-                    name="option"
-                    id={questions[currentQuestionIndex]?.option1}
-                    type="radio"
-                    value={questions[currentQuestionIndex]?.option1}
-                    onChange={(e) => {
-                      handleChoiceChange(e);
-                    }}
-                    className="option1"
-                  />{" "}
-                  <span className="">
-                    {questions[currentQuestionIndex]?.option1}
-                  </span>
-                </div>
-              </label>
-              <label
-                onClick={() => setDisabled(false)}
-                htmlFor={questions[currentQuestionIndex]?.option2}
-                className="label"
-              >
-                <div
-                  //  onClick={handleNoChoiceClick}
-                  className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp"
-                >
-                  {" "}
-                  <input
-                    name="option"
-                    id={questions[currentQuestionIndex]?.option2}
-                    type="radio"
-                    value={questions[currentQuestionIndex]?.option2}
-                    onChange={(e) => {
-                      handleChoiceChange(e);
-                    }}
-                    className="option2"
-                  />{" "}
-                  <span className="">
-                    {questions[currentQuestionIndex]?.option2}
-                  </span>
-                </div>
-              </label>
-              <label
-                onClick={() => setDisabled(false)}
-                htmlFor={questions[currentQuestionIndex]?.option3}
-                className="label"
-              >
-                <div
-                  // onClick={handleYesChoiceClick}
-                  className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp"
-                >
-                  <input
-                    name="option"
-                    id={questions[currentQuestionIndex]?.option3}
-                    type="radio"
-                    value={questions[currentQuestionIndex]?.option3}
-                    onChange={(e) => {
-                      handleChoiceChange(e);
-                    }}
-                    className="option3"
-                  />{" "}
-                  <span className="">
-                    {questions[currentQuestionIndex]?.option3}
-                  </span>
-                </div>
-              </label>
-              <label
-                onClick={() => setDisabled(false)}
-                htmlFor={questions[currentQuestionIndex]?.option4}
-                className="label"
-              >
-                <div
-                  //  onClick={handleNoChoiceClick}
-                  className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp"
-                >
-                  {" "}
-                  <input
-                    name="option"
-                    id={questions[currentQuestionIndex]?.option4}
-                    type="radio"
-                    value={questions[currentQuestionIndex]?.option4}
-                    onChange={(e) => {
-                      handleChoiceChange(e);
-                    }}
-                    className="option4"
-                  />{" "}
-                  <span className="">
-                    {questions[currentQuestionIndex]?.option4}
-                  </span>
-                </div>
-              </label>
-            </div>
-          </div>
-          <div className="flex items-center justify-between w-full next-prev md:max-w-screen-md">
-            {currentQuestionIndex === 0 ? (
-              <button></button>
-            ) : (
-              <button
-                onClick={handlePrevQuestion}
-                className="border-2 border-teal-500 text-[#000]  py-3 px-4 text-sm md:text-base rounded"
-              >
-                <span></span> Previous
-              </button>
-            )}
-            {currentQuestionIndex < questions.length - 1 && (
-              <button
-                onClick={handleNextQuestion}
-                className={`bg-teal-500 text-[#fff] py-3 px-4 text-sm md:text-base rounded ${
-                  disabled ? "opacity-40 cursor-not-allowed " : ""
+        <div>
+          {error && <p className="text-sm text-red-500">{error}</p>}
+          {message && <p className="text-sm text-green-500">{message}</p>}
+        </div>
+        <div className="w-fit m-auto h-fit">
+          {questions.map((question, index) => {
+            let options = [
+              question?.option1,
+              question?.option2,
+              question?.option3,
+              question?.option4,
+            ];
+            return (
+              <Question
+                index={index}
+                key={question.questionID}
+                question={question}
+                options={options}
+                className={`flex-col items-center justify-center mt-16 content gap-y-16 question transition-all duration-200 ${
+                  index === currentQuestionIndex
+                    ? "flex opacity-1"
+                    : "hidden opacity-0"
                 }`}
-                disabled={disabled}
-              >
-                Next
-              </button>
-            )}
-            {currentQuestionIndex === questions.length - 1 && (
-              <button
-                onClick={finishHandler}
-                className={`bg-teal-500 text-[#fff] py-3 px-4 text-sm md:text-base rounded ${
-                  disabled ? "opacity-40 cursor-not-allowed " : ""
-                }`}
-                disabled={disabled}
-              >
-                <span></span> Finish
-              </button>
-            )}
-          </div>
+                setChoice={setChoice}
+                Finish={finishHandler}
+                Next={handleNextQuestion}
+                Prev={handlePrevQuestion}
+                allAnswered={
+                  responses.length === questions.length ? true : false
+                }
+              />
+            );
+          })}
         </div>
       </div>
     </div>

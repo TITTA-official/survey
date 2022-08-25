@@ -1,25 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import "./App.css";
 
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import axios from "axios";
 import {
   AuthContext,
-  AuthContextProvider,
+  ChoiceProvider,
+  QuestionProvider,
   ResultShowProvider,
+  ScoreProvider,
   ShowAdminUsersListProvider,
   ShowAdminViewStatisticsProvider,
   ShowBoardOfUsersProvider,
   ShowCreateQuestionsProvider,
   ShowUploadLearningMaterialsProvider,
-  SurveyShowProvider,
-  ViewLearningMaterialsProvider,
-  ChoiceProvider,
-  ScoreProvider,
-  QuestionProvider,
   ShowViewSurveyQuestionsProvider,
-  VideoUrlProvider
+  SurveyShowProvider,
+  VideoUrlProvider,
+  ViewLearningMaterialsProvider,
 } from "./context";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -113,7 +112,6 @@ function App() {
                                 <ShowViewSurveyQuestionsProvider>
                                   <VideoUrlProvider>
                                     <AdminDashboardPage user={user} />
-
                                   </VideoUrlProvider>
                                 </ShowViewSurveyQuestionsProvider>
                               </QuestionProvider>
@@ -134,30 +132,29 @@ function App() {
           element={
             <PrivateRoute user={user}>
               <ShowBoardOfUsersProvider>
-              <ShowCreateQuestionsProvider>
-                <ShowUploadLearningMaterialsProvider>
-                  <ViewLearningMaterialsProvider>
-                    <ResultShowProvider>
-                      <ShowAdminUsersListProvider>
-                        <ShowAdminViewStatisticsProvider>
-                          <ChoiceProvider>
-                            <ScoreProvider>
-                              <QuestionProvider>
-                                <ShowViewSurveyQuestionsProvider>
-                                  <VideoUrlProvider>
-                                    <SuperAdminDashboardPage user={user} />
-
-                                  </VideoUrlProvider>
-                                </ShowViewSurveyQuestionsProvider>
-                              </QuestionProvider>
-                            </ScoreProvider>
-                          </ChoiceProvider>
-                        </ShowAdminViewStatisticsProvider>
-                      </ShowAdminUsersListProvider>
-                    </ResultShowProvider>
-                  </ViewLearningMaterialsProvider>
-                </ShowUploadLearningMaterialsProvider>
-              </ShowCreateQuestionsProvider>
+                <ShowCreateQuestionsProvider>
+                  <ShowUploadLearningMaterialsProvider>
+                    <ViewLearningMaterialsProvider>
+                      <ResultShowProvider>
+                        <ShowAdminUsersListProvider>
+                          <ShowAdminViewStatisticsProvider>
+                            <ChoiceProvider>
+                              <ScoreProvider>
+                                <QuestionProvider>
+                                  <ShowViewSurveyQuestionsProvider>
+                                    <VideoUrlProvider>
+                                      <SuperAdminDashboardPage user={user} />
+                                    </VideoUrlProvider>
+                                  </ShowViewSurveyQuestionsProvider>
+                                </QuestionProvider>
+                              </ScoreProvider>
+                            </ChoiceProvider>
+                          </ShowAdminViewStatisticsProvider>
+                        </ShowAdminUsersListProvider>
+                      </ResultShowProvider>
+                    </ViewLearningMaterialsProvider>
+                  </ShowUploadLearningMaterialsProvider>
+                </ShowCreateQuestionsProvider>
               </ShowBoardOfUsersProvider>
             </PrivateRoute>
           }
