@@ -41,7 +41,10 @@ function ViewResults() {
                   <option value="user">User</option>
                   <option value="admin">Admin</option>
                 </select> */}
-                          {Math.round((user.score / questions.length) * 100)}%
+                          {Math.round(
+                            (user.score / (questions.length * 4)) * 100
+                          )}
+                          %
                         </td>
                       </tr>
                     )
