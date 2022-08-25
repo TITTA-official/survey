@@ -227,7 +227,7 @@ function ViewSurveyQuestions() {
           onSubmit={(e) => {
             handleSubmit(e);
           }}
-          className={`cardd bg-white w-[80%] md:max-w-lg shadow-2xl flex flex-col justify-center px-6 py-4 rounded md:rounded-lg absolute top-5 right-5`}
+          className={`cardd bg-white w-[80%] md:max-w-lg shadow-2xl flex flex-col justify-center px-6 py-4 rounded md:rounded-lg fixed top-2 right-5`}
         >
           <div
             onClick={() => {
@@ -292,7 +292,7 @@ function ViewSurveyQuestions() {
                 <input
                   type="text"
                   className="w-[60%] mt-8 text-sm px-2 py-3 border-2 border-gray-500 rounded"
-                  placeholder="Option 1 Linkage"
+                  placeholder="Option 2 Linkage"
                   onChange={(e) => {
                     setLinkageOption2(e.target.value);
                   }}
@@ -313,7 +313,7 @@ function ViewSurveyQuestions() {
                 <input
                   type="text"
                   className="w-[60%] mt-8 text-sm px-2 py-3 border-2 border-gray-500 rounded"
-                  placeholder="Option 1 Linkage"
+                  placeholder="Option 3 Linkage"
                   onChange={(e) => {
                     setLinkageOption3(e.target.value);
                   }}
@@ -333,7 +333,7 @@ function ViewSurveyQuestions() {
                 <input
                   type="text"
                   className="w-[60%] mt-8 text-sm px-2 py-3 border-2 border-gray-500 rounded"
-                  placeholder="Option 1 Linkage"
+                  placeholder="Option 4 Linkage"
                   onChange={(e) => {
                     setLinkageOption4(e.target.value);
                   }}

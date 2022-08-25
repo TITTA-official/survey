@@ -35,29 +35,31 @@ export const SurveyShowProvider = (props) => {
       {props.children}
     </SurveyShowContext.Provider>
   );
-  }
+};
 
-  export const VideoUrlProvider = (props) => {
-    const [videoUrl, setVideoUrl] = useState('');
-    
-    return (
-      <VideoUrlContext.Provider value={[videoUrl, setVideoUrl]}>
-        {props.children}
-      </VideoUrlContext.Provider>
-    );
-  };
+export const VideoUrlProvider = (props) => {
+  const [videoUrl, setVideoUrl] = useState("");
+
+  return (
+    <VideoUrlContext.Provider value={[videoUrl, setVideoUrl]}>
+      {props.children}
+    </VideoUrlContext.Provider>
+  );
+};
 
 export const ShowViewSurveyQuestionsProvider = (props) => {
   const [showViewSurveyQuestions, setShowViewSurveyQuestions] = useState(false);
 
   return (
-    <ShowViewSurveyQuestionsContext.Provider value={[showViewSurveyQuestions, setShowViewSurveyQuestions]}>
+    <ShowViewSurveyQuestionsContext.Provider
+      value={[showViewSurveyQuestions, setShowViewSurveyQuestions]}
+    >
       {props.children}
     </ShowViewSurveyQuestionsContext.Provider>
   );
 };
 export const ChoiceProvider = (props) => {
-  const [choice, setChoice] = useState('');
+  const [choice, setChoice] = useState("");
 
   return (
     <ChoiceContext.Provider value={[choice, setChoice]}>
@@ -171,6 +173,7 @@ export const ShowAdminUsersListProvider = (props) => {
 
 export const QuestionProvider = (props) => {
   const [questions, setQuestions] = useState([]);
+  const [linkages, setLinkages] = useState([]);
 
   let token = localStorage.getItem("token");
   useEffect(() => {
@@ -182,15 +185,20 @@ export const QuestionProvider = (props) => {
           },
         });
 
+        let linkagesRes = await axios.get("/admin/survey/linkage", {
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        });
+        setLinkages(linkagesRes.data.results);
         setQuestions(res.data.results);
       };
       getSurvey();
     }
-   
   }, [token]);
 
   return (
-    <QuestionContext.Provider value={[questions]}>
+    <QuestionContext.Provider value={[questions, linkages]}>
       {props.children}
     </QuestionContext.Provider>
   );

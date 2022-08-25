@@ -11,78 +11,159 @@ import {
 function SurveyPage() {
   const [disabled, setDisabled] = useState(true);
   const [showSurvey, setShowSurvey] = useContext(SurveyShowContext);
-  const [questions] = useContext(QuestionContext);
+  const [questions, linkages] = useContext(QuestionContext);
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [surveyEnd, setSurveyEnd] = useState(false);
   const [choice, setChoice] = useContext(ChoiceContext);
   const [score, setScore] = useContext(ScoreContext);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [prevQuestionIndex, setPreviousQuestionIndex] = useState(0);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [user, setUser] = useContext(AuthContext);
+  const [user] = useContext(AuthContext);
+  const [responses, setResponses] = useState([]);
 
   useEffect(() => {
     if (questions.length > 0) {
       const loadQuestion = () => {
-        setCurrentQuestion(questions[currentQuestionIndex].question);
+        setCurrentQuestion(questions[currentQuestionIndex]?.question);
       };
       loadQuestion();
     }
   }, [currentQuestionIndex, questions]);
 
   const handleNextQuestion = () => {
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
+    setResponses((prev) => [
+      ...prev,
+      {
+        questionID: currentQuestion.questionID,
+        question: currentQuestion,
+        response: choice,
+      },
+    ]);
+    setPreviousQuestionIndex(currentQuestionIndex);
+    let question = questions[currentQuestionIndex];
+    Object.entries(question).forEach((key) => {
+      if (key[1]?.toString().toLowerCase() === choice.toLowerCase()) {
+        setScore((prev) => {
+          if (key[0]?.toLocaleLowerCase() === "option1") {
+            return prev + 4;
+          }
+          if (key[0]?.toLocaleLowerCase() === "option2") {
+            return prev + 3;
+          }
+          if (key[0]?.toLocaleLowerCase() === "option3") {
+            return prev + 2;
+          }
+          if (key[0]?.toLocaleLowerCase() === "option4") {
+            return prev + 1;
+          }
+        });
+        let linkageExist = linkages.find(
+          (linkage) => linkage?.questionID === question.questionID
+        );
+        if (linkageExist) {
+          let idToGoto = linkageExist[key[0]];
+          let index = questions.findIndex(
+            (question) => question.questionID === idToGoto
+          );
+          if (index > -1) {
+            setCurrentQuestionIndex(index);
+          } else {
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
+          }
+        } else {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+        }
+      }
+    });
     setChoice("");
     setDisabled(true);
   };
   const handlePrevQuestion = () => {
-    setCurrentQuestionIndex(currentQuestionIndex - 1);
+    console.log(prevQuestionIndex);
+    if (prevQuestionIndex > 0) {
+      setCurrentQuestionIndex(prevQuestionIndex);
+      setTimeout(() => {
+        setPreviousQuestionIndex(0);
+      }, 500);
+      return false;
+    }
+    return setCurrentQuestionIndex(currentQuestionIndex - 1);
   };
   const handleChoiceChange = (e) => {
     setChoice(e.target.value);
   };
 
-  // const handleScore = async (id, score) => {
-  //   let token = localStorage.getItem("token");
-  //   let newScore = score + 1;
-  //   try {
-  //     const res = await axios.patch(
-  //       `/users/update_score/${id}`,
-  //       {
-  //         score: newScore,
-  //       },
-  //       {
-  //         headers: {
-  //           authorization: "Bearer " + token,
-  //         },
-  //       }
-  //     );
-  //     if (res.status === 200 && choice === "yes") {
-  //       setScore(newScore);
-  //       setMessage(res.data.message);
-  //       setTimeout(() => {
-  //         setMessage("");
-  //       }, 2000);
-  //     }
-  //     console.log(res.data);
-  //     console.log(score);
-  //     console.log(choice);
-  //   } catch (error) {
-  //     //console.log(error);
-  //     setError(error.response.data.error);
-  //     setTimeout(() => {
-  //       setError("");
-  //     }, 2000);
-  //   }
-  // };
+  const handleScore = async (id, score) => {
+    let token = localStorage.getItem("token");
+    try {
+      const res = await axios.patch(
+        `/users/update_score/${id}`,
+        {
+          score,
+        },
+        {
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        }
+      );
+
+      setMessage(res.data.message);
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
+      console.log(res.data);
+    } catch (error) {
+      //console.log(error);
+      setError(error.response.data.error);
+      setTimeout(() => {
+        setError("");
+      }, 2000);
+    }
+  };
+
+  const handleResponse = async () => {
+    let token = localStorage.getItem("token");
+    try {
+      const res = await axios.post(
+        `/users/response/post_response`,
+        {
+          data: [...new Set(responses)],
+          userID: user.id,
+        },
+        {
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        }
+      );
+
+      setMessage(res.data.message);
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
+      console.log(res.data);
+    } catch (error) {
+      //console.log(error);
+      setError(error.response.data.error);
+      setTimeout(() => {
+        setError("");
+      }, 2000);
+    }
+  };
 
   const finishHandler = () => {
     if (currentQuestionIndex === questions.length - 1) {
       setSurveyEnd(true);
     }
-    // handleScore(user.id, score);
+    handleScore(user.id, score);
+    handleResponse();
     setChoice("");
   };
+
+  console.log(responses);
 
   if (surveyEnd) {
     return (
@@ -114,7 +195,7 @@ function SurveyPage() {
   }
 
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <div className="flex justify-between w-full px-6 py-4 text-xs font-medium s-nav bg-glass">
         <span>
           <span className="opacity-60">
@@ -154,13 +235,10 @@ function SurveyPage() {
               </span>{" "}
               {`${currentQuestion}`}
             </span>
-
-            {/* return(<span className="text-sm font-medium leading-loose md:text-lg"><span className='font-bold'>{`Q${question.id}`}</span> {`${question.question}`}</span>) */}
-
             <div className="flex flex-col w-full gap-4 text-sm md:text-base">
               <label
                 onClick={() => setDisabled(false)}
-                htmlFor="always"
+                htmlFor={questions[currentQuestionIndex]?.option1}
                 className="label"
               >
                 <div
@@ -169,21 +247,22 @@ function SurveyPage() {
                 >
                   <input
                     name="option"
-                    id="yes"
+                    id={questions[currentQuestionIndex]?.option1}
                     type="radio"
-                    value="yes"
+                    value={questions[currentQuestionIndex]?.option1}
                     onChange={(e) => {
                       handleChoiceChange(e);
                     }}
                     className="option1"
-                    checked={choice === "yes" ? true : false}
                   />{" "}
-                  <span className="">Yes</span>
+                  <span className="">
+                    {questions[currentQuestionIndex]?.option1}
+                  </span>
                 </div>
               </label>
               <label
                 onClick={() => setDisabled(false)}
-                htmlFor="rarely"
+                htmlFor={questions[currentQuestionIndex]?.option2}
                 className="label"
               >
                 <div
@@ -193,20 +272,69 @@ function SurveyPage() {
                   {" "}
                   <input
                     name="option"
-                    id="no"
+                    id={questions[currentQuestionIndex]?.option2}
                     type="radio"
-                    value="no"
+                    value={questions[currentQuestionIndex]?.option2}
                     onChange={(e) => {
                       handleChoiceChange(e);
                     }}
                     className="option2"
-                    checked={choice === "no" ? true : false}
                   />{" "}
-                  <span className="">Never</span>
+                  <span className="">
+                    {questions[currentQuestionIndex]?.option2}
+                  </span>
+                </div>
+              </label>
+              <label
+                onClick={() => setDisabled(false)}
+                htmlFor={questions[currentQuestionIndex]?.option3}
+                className="label"
+              >
+                <div
+                  // onClick={handleYesChoiceClick}
+                  className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp"
+                >
+                  <input
+                    name="option"
+                    id={questions[currentQuestionIndex]?.option3}
+                    type="radio"
+                    value={questions[currentQuestionIndex]?.option3}
+                    onChange={(e) => {
+                      handleChoiceChange(e);
+                    }}
+                    className="option3"
+                  />{" "}
+                  <span className="">
+                    {questions[currentQuestionIndex]?.option3}
+                  </span>
+                </div>
+              </label>
+              <label
+                onClick={() => setDisabled(false)}
+                htmlFor={questions[currentQuestionIndex]?.option4}
+                className="label"
+              >
+                <div
+                  //  onClick={handleNoChoiceClick}
+                  className="flex items-center w-full gap-4 px-3 py-4 font-semibold border border-gray-400 rounded cursor-pointer radio-grp"
+                >
+                  {" "}
+                  <input
+                    name="option"
+                    id={questions[currentQuestionIndex]?.option4}
+                    type="radio"
+                    value={questions[currentQuestionIndex]?.option4}
+                    onChange={(e) => {
+                      handleChoiceChange(e);
+                    }}
+                    className="option4"
+                  />{" "}
+                  <span className="">
+                    {questions[currentQuestionIndex]?.option4}
+                  </span>
                 </div>
               </label>
             </div>
-            {/* <button className='w-1/6 py-3 text-sm text-white bg-teal-500 rounded md:text-base'>OK</button> */}
           </div>
           <div className="flex items-center justify-between w-full next-prev md:max-w-screen-md">
             {currentQuestionIndex === 0 ? (
