@@ -36,7 +36,7 @@ function SurveyPage() {
     setPreviousQuestionIndex(currentQuestionIndex);
     // console.log(choice);
     let question = questions[currentQuestionIndex];
-    Object.entries(question).forEach((key) => {
+    Object.entries(question).forEach((key, index) => {
       if (key[1]?.toString().toLowerCase() === choice.toLowerCase()) {
         setResponses((prev) => {
           let state = prev.filter(
@@ -82,7 +82,7 @@ function SurveyPage() {
         } else {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
         }
-      } else {
+      } else if(index === Object.keys(question).length - 1){
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       }
     });
