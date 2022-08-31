@@ -69,9 +69,10 @@ export const ChoiceProvider = (props) => {
 };
 export const ScoreProvider = (props) => {
   const [score, setScore] = useState(0);
+  const [surveyEnd, setSurveyEnd] = useState(false);
 
   return (
-    <ScoreContext.Provider value={[score, setScore]}>
+    <ScoreContext.Provider value={[score, setScore, surveyEnd, setSurveyEnd]}>
       {props.children}
     </ScoreContext.Provider>
   );

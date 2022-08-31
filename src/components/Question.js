@@ -62,7 +62,7 @@ function Question({
           setTimeout(() => {
             setMessage("");
           }, 2000);
-          console.log(res.data);
+          // console.log(res.data);
         } catch (error) {
           // console.log(error);
           setError(error.response.data.error);
@@ -92,7 +92,7 @@ function Question({
               <label key={id} htmlFor={opt + index}>
                 <div
                   // onClick={handleYesChoiceClick}
-                  className="flex items-center w-full gap-4 px-3 py-4 font-semibold border capitalize border-gray-400 rounded cursor-pointer radio-grp"
+                  className="flex items-center w-full gap-4 px-3 py-4 font-semibold capitalize border border-gray-400 rounded cursor-pointer radio-grp"
                 >
                   <input
                     name="option"

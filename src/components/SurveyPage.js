@@ -13,11 +13,10 @@ function SurveyPage() {
   const [showSurvey, setShowSurvey] = useContext(SurveyShowContext);
   const [questions, linkages] = useContext(QuestionContext);
   const [currentQuestion, setCurrentQuestion] = useState("");
-  const [surveyEnd, setSurveyEnd] = useState(false);
   const [choice, setChoice] = useContext(ChoiceContext);
-  const [score, setScore] = useContext(ScoreContext);
+  const [score, setScore, surveyEnd, setSurveyEnd] = useContext(ScoreContext);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [prevQuestionIndex, setPreviousQuestionIndex] = useState(0);
+  const [prevQuestionIndex, setPreviousQuestionIndex] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [user] = useContext(AuthContext);
@@ -34,10 +33,9 @@ function SurveyPage() {
 
   const handleNextQuestion = () => {
     setPreviousQuestionIndex(currentQuestionIndex);
-    // console.log(choice);
     let question = questions[currentQuestionIndex];
-    Object.entries(question).forEach((key, index) => {
-      if (key[1]?.toString().toLowerCase() === choice.toLowerCase()) {
+    Object.keys(question).forEach((key) => {
+      if (question[key].toString().toLowerCase() === choice.toLowerCase()) {
         setResponses((prev) => {
           let state = prev.filter(
             (res) => res.question !== currentQuestion.questionID
@@ -51,18 +49,18 @@ function SurveyPage() {
             },
           ];
         });
-        UpdateObj(key[0]?.toLocaleLowerCase());
+        UpdateObj(key.toLocaleLowerCase());
         setScore((prev) => {
-          if (key[0]?.toLocaleLowerCase() === "option1") {
+          if (key.toLocaleLowerCase() === "option1") {
             return prev + 4;
           }
-          if (key[0]?.toLocaleLowerCase() === "option2") {
+          if (key.toLocaleLowerCase() === "option2") {
             return prev + 3;
           }
-          if (key[0]?.toLocaleLowerCase() === "option3") {
+          if (key.toLocaleLowerCase() === "option3") {
             return prev + 2;
           }
-          if (key[0]?.toLocaleLowerCase() === "option4") {
+          if (key.toLocaleLowerCase() === "option4") {
             return prev + 1;
           }
         });
@@ -70,7 +68,7 @@ function SurveyPage() {
           (linkage) => linkage?.questionID === question.questionID
         );
         if (linkageExist) {
-          let idToGoto = linkageExist[key[0]];
+          let idToGoto = linkageExist[key];
           let index = questions.findIndex(
             (question) => question.questionID === idToGoto
           );
@@ -82,8 +80,6 @@ function SurveyPage() {
         } else {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
         }
-      } else if(index === Object.keys(question).length - 1){
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
       }
     });
     setChoice("");
@@ -97,10 +93,10 @@ function SurveyPage() {
   };
   const handlePrevQuestion = () => {
     // console.log(prevQuestionIndex);
-    if (prevQuestionIndex > 0) {
+    if (prevQuestionIndex || prevQuestionIndex === 0) {
       setCurrentQuestionIndex(prevQuestionIndex);
       setTimeout(() => {
-        setPreviousQuestionIndex(0);
+        setPreviousQuestionIndex("");
       }, 500);
       return false;
     }
@@ -205,7 +201,7 @@ function SurveyPage() {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between w-full px-6 py-4 text-xs font-medium s-nav bg-glass">
+      {/* <div className="flex justify-between w-full px-6 py-4 text-xs font-medium s-nav bg-glass">
         <span>
           <span className="opacity-60">
             {currentQuestionIndex + 1}. Survey.{" "}
@@ -223,7 +219,7 @@ function SurveyPage() {
               </>
             )}
         </span>
-      </div>
+      </div> */}
       <div className="w-full border-b-2 line border-b-gray-100"></div>
       <div className="px-6 py-5 s-body">
         <div
@@ -240,7 +236,7 @@ function SurveyPage() {
           {error && <p className="text-sm text-red-500">{error}</p>}
           {message && <p className="text-sm text-green-500">{message}</p>}
         </div>
-        <div className="w-fit m-auto h-fit">
+        <div className="m-auto w-fit h-fit">
           {questions.map((question, index) => {
             let options = [
               question?.option1,

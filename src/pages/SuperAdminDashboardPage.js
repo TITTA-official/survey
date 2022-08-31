@@ -128,7 +128,7 @@ function SuperAdminDashboardPage({ user }) {
           onClick={() => setShowViewSurveyQuestions(!showViewSurveyQuestions)}
           className="flex items-center justify-center w-3/6 px-6 text-center bg-teal-600 rounded-full cursor-pointer action py-14"
         >
-          View Survey Questions
+          Manage Survey Questions
         </div>
         <div
           onClick={() => setShowResult(!showResult)}
