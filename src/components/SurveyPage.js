@@ -34,18 +34,30 @@ function SurveyPage() {
   const handleNextQuestion = () => {
     setPreviousQuestionIndex(currentQuestionIndex);
     let question = questions[currentQuestionIndex];
+    let choiceAlt = "";
+    if (!choice) {
+      let res = responses.filter(
+        (res) => res.questionID === question.questionID
+      )[0];
+      choiceAlt = res?.response;
+    }
+    // console.log(choiceAlt);
+
     Object.keys(question).forEach((key) => {
-      if (question[key].toString().toLowerCase() === choice.toLowerCase()) {
+      if (
+        question[key].toString().toLowerCase() === choice.toLowerCase() ||
+        question[key].toString().toLowerCase() === choiceAlt.toLowerCase()
+      ) {
         setResponses((prev) => {
           let state = prev.filter(
-            (res) => res.question !== currentQuestion.questionID
+            (res) => res.questionID !== question.questionID
           );
           return [
             ...state,
             {
               questionID: questions[currentQuestionIndex].questionID,
               question: currentQuestion,
-              response: choice,
+              response: choice !== "" ? choice : choiceAlt,
             },
           ];
         });
@@ -122,7 +134,7 @@ function SurveyPage() {
       setTimeout(() => {
         setMessage("");
       }, 2000);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       //console.log(error);
       setError(error.response.data.error);
@@ -163,12 +175,14 @@ function SurveyPage() {
 
   const finishHandler = (e) => {
     e.preventDefault();
-    if (responses.length === questions.length - 1) {
+    if (currentQuestionIndex === questions.length - 1) {
       setSurveyEnd(true);
     }
     handleScore(user.id, score);
     setChoice("");
   };
+
+  // console.log(responses);
 
   if (surveyEnd) {
     return (
@@ -259,9 +273,7 @@ function SurveyPage() {
                 Finish={finishHandler}
                 Next={handleNextQuestion}
                 Prev={handlePrevQuestion}
-                allAnswered={
-                  responses.length === questions.length - 1 ? true : false
-                }
+                allAnswered={index === questions.length - 1 ? true : false}
               />
             );
           })}

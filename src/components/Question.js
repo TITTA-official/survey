@@ -75,6 +75,15 @@ function Question({
     }
   }, [changed, prevChoiceOption, question]);
 
+  useEffect(() => {
+    let options = document.querySelectorAll(".option");
+    options = [...options];
+    let check = options.some((option) => option.checked);
+    if (check) {
+      setDisabled(false);
+    }
+  }, []);
+
   return (
     <form className={className} onSubmit={Finish}>
       <div className="hidden">
@@ -100,6 +109,7 @@ function Question({
                     type="radio"
                     value={opt}
                     onChange={handleChange}
+                    className="option"
                   />
                   <span className="">{opt}</span>
                 </div>
